@@ -1,4 +1,4 @@
-//import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { parseTAFAsForecast, getCompositeForecastForDate } from 'metar-taf-parser';
 import fetch from 'node-fetch';
 import { applyMinimums } from './minimums.mjs';
@@ -13,15 +13,14 @@ const isTafCacheCurrent = (taf) => {
 
 export const addForecastByHour = async (airport) => {
     let taf;
-    /*
+
     const cacheFilePath = `./cache/${airport.id}.json`;
-    if (existsSync(cacheFilePath)) {
+    if (process.env.DEPLOYMENT_ENV === 'dev' && existsSync(cacheFilePath)) {
         taf = JSON.parse(readFileSync(cacheFilePath, 'utf8'));
         if (!isTafCacheCurrent(taf)) {
             taf = undefined;
         }
     } 
-    */
     if (!taf) {
         const response = await fetch(`https://api.metar-taf.com/taf?api_key=${process.env.METAR_TAF_API_KEY}&v=2.3&locale=en-US&id=${airport.id}`);
         const body = await response.text();
@@ -30,12 +29,12 @@ export const addForecastByHour = async (airport) => {
             throw new Error(`Failed to fetch TAF for ${airport.id}: ${body}`);
         }
         taf.downloaded = Date.now();
-        /*
-        if (!existsSync('./cache')) {
-            mkdirSync('./cache');
+        if (process.env.DEPLOYMENT_ENV === 'dev') {
+            if (!existsSync('./cache')) {
+                mkdirSync('./cache');
+            }
+            writeFileSync(`./cache/${airport.id}.json`, JSON.stringify(taf, undefined, ' '));
         }
-        writeFileSync(`./cache/${airport.id}.json`, JSON.stringify(taf, undefined, ' '));
-        */
     }
 
     taf.starttime = new Date(taf.starttime * 1000 /* convert from UNIX time */);
