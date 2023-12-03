@@ -35,9 +35,9 @@ function App() {
       <header className="App-header">
         MyMinimums {currentTimeString}
       </header>
-      <img className="Wx-Vis" src={wxVisResponse}/>
+      <img className="Wx-Vis" src={wxVisResponse} alt="Vis"/>
       <div className="Wx-Disc">{wxDiscussionResponse}</div>
-      <img className="Wx-Cam" src="http://www.harveyfield.com/WebcamImageHandler.ashx"/>
+      <img className="Wx-Cam" src="http://www.harveyfield.com/WebcamImageHandler.ashx" alt="Cam"/>
       <pre className="Tafs">{apiResponse}</pre>
     </div>
   );
