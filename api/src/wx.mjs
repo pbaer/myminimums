@@ -1,4 +1,5 @@
-import { getCachedData, putCachedData } from "./cache.mjs";
+import fetch from 'node-fetch';
+import { getCachedData, putCachedData } from './cache.mjs';
 
 export const wxDiscussion = async () => {
     let wxdisc = getCachedData('wxdisc');
