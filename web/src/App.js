@@ -7,7 +7,7 @@ function App() {
   const [wxVisResponse, setWxVisResponse] = useState('');
 
   useEffect(() => {
-    fetch('/api/today')
+    fetch('/api/today?utcOffset=-8')
       .then(response => response.text())
       .then(data => setApiResponse(data));
   }, []);
@@ -37,6 +37,7 @@ function App() {
       </header>
       <img className="Wx-Vis" src={wxVisResponse}/>
       <div className="Wx-Disc">{wxDiscussionResponse}</div>
+      <img className="Wx-Cam" src="http://www.harveyfield.com/WebcamImageHandler.ashx"/>
       <pre className="Tafs">{apiResponse}</pre>
     </div>
   );

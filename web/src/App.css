@@ -16,16 +16,20 @@
   color: #61dafb;
 }
 
-.Tafs {
-  padding-left: 1vh;
-  padding-right: 1vh;
-}
-
 .Wx-Vis {
   width: 100%;
 }
 
 .Wx-Disc {
+  padding-left: 1vh;
+  padding-right: 1vh;
+}
+
+.Wx-Cam {
+  width: 100%;
+}
+
+.Tafs {
   padding-left: 1vh;
   padding-right: 1vh;
 }
