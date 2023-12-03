@@ -1,5 +1,5 @@
 import { printToday } from '../src/index.mjs';
-import { wxDiscussion } from '../src/wx.mjs';
+import { wxDiscussion, wxVis } from '../src/wx.mjs';
 
 export default async function (context, req) {
     context.log('Starting execution');
@@ -9,6 +9,11 @@ export default async function (context, req) {
             context.res = {
                 status: 200,
                 body: await wxDiscussion()
+            };
+        } else if (source === 'wxvis') {
+            context.res = {
+                status: 200,
+                body: await wxVis()
             };
         } else {
             const utcOffset = req.query && req.query.utcOffset;

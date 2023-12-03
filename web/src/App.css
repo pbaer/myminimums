@@ -17,11 +17,15 @@
 }
 
 .Tafs {
-  padding-left: 2vh;
-  padding-right: 2vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+}
+
+.Wx-Vis {
+  width: 100%;
 }
 
 .Wx-Disc {
-  padding-left: 2vh;
-  padding-right: 2vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
 }
