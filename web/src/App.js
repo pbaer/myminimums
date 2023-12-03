@@ -14,9 +14,11 @@ function App() {
   useEffect(() => {
     fetch('/api/today?source=wxdisc')
       .then(response => response.text())
-      .then(data => setWxDiscussionResponse(data.split('\n\n').map((paragraph, index) => (
-        <p key={index}>{paragraph}</p>
-      ))));
+      .then(data => setWxDiscussionResponse(data.split('\n\n').map((paragraph, index) => {
+        return paragraph ? (
+          <p key={index}>{paragraph}</p>
+        ) : undefined;
+      })));
   }, []);
 
   return (
@@ -25,7 +27,7 @@ function App() {
         MyMinimums
       </header>
       <div className="Wx-Disc">{wxDiscussionResponse}</div>
-      <pre>{apiResponse}</pre>
+      <pre className="Tafs">{apiResponse}</pre>
     </div>
   );
 }
