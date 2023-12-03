@@ -69,7 +69,7 @@ export const printToday = async (utcOffset) => {
     const hours = eachHourOfInterval({
         start: start,
         end: new Date(end.getTime() - oneHourInMs)
-    });
+    }).filter(isDaylightHour);
 
     let separatorLine = '+------+';
     hours.forEach(_ => separatorLine += '------+');
