@@ -42,7 +42,7 @@ export const printToday = async (utcOffset) => {
 
     let output = '';
     const addLine = (line) => {
-        output += `${line}\n`;
+        output += `${line ?? ''}\n`;
     };
 
     let start = new Date(Date.now() + oneYearInMs);
@@ -137,8 +137,10 @@ export const printToday = async (utcOffset) => {
     }
 
     addLine('');
-    for (const airport of airports.filter(x => x.local)) {
+    for (const airport of airports) {
+        addLine(`${airport.name} (${airport.city}, ${airport.zone} Zone)`);
         addLine(airport.forecastRaw);
+        addLine();
     }
 
     return output;
