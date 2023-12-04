@@ -37,7 +37,7 @@ function App() {
       </header>
       <img className="Wx-Vis" src={wxVisResponse} alt="Vis"/>
       <div className="Wx-Disc">{wxDiscussionResponse}</div>
-      <img className="Wx-Cam" src="http://www.harveyfield.com/WebcamImageHandler.ashx" alt="Cam"/>
+      <img className="Wx-Cam" src="/api/today?source=wxcam" alt="Cam"/>
       <pre className="Tafs">{apiResponse}</pre>
     </div>
   );

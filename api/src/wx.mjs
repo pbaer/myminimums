@@ -35,3 +35,17 @@ export const wxVis = async () => {
     }
     return wxvis.url;
 };
+
+export const wxCam = async () => {
+    let wxcam = getCachedData('wxcam');
+    if (!wxcam) {
+        const response = await fetch('http://www.harveyfield.com/WebcamImageHandler.ashx');
+        const arrayBuffer = await response.arrayBuffer();
+        const imageBuffer = Buffer.from(arrayBuffer);
+        wxcam = {
+            image: imageBuffer.toString('base64')
+        };
+        putCachedData('wxcam', wxcam);
+    }
+    return Buffer.from(wxcam.image, 'base64');
+};

@@ -1,5 +1,5 @@
 import { printToday } from '../src/index.mjs';
-import { wxDiscussion, wxVis } from '../src/wx.mjs';
+import { wxDiscussion, wxVis, wxCam } from '../src/wx.mjs';
 
 export default async function (context, req) {
     context.log('Starting execution');
@@ -14,6 +14,13 @@ export default async function (context, req) {
             context.res = {
                 status: 200,
                 body: await wxVis()
+            };
+        } else if (source == 'wxcam') {
+            context.res = {
+                status: 200,
+                headers: { 'content-type': 'image/jpeg' },
+                body: await wxCam(),
+                isRaw: true
             };
         } else {
             const utcOffset = req.query && req.query.utcOffset;
