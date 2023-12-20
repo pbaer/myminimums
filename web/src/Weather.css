@@ -1,8 +1,8 @@
-.App {
+.wx {
   text-align: left;
 }
 
-.App-header {
+.wx-header {
   background-color: #282c34;
   display: flex;
   flex-direction: column;
@@ -12,24 +12,24 @@
   color: white;
 }
 
-.App-link {
+.wx-link {
   color: #61dafb;
 }
 
-.Wx-Vis {
+.wx-vis {
   width: 100%;
 }
 
-.Wx-Disc {
+.wx-disc {
   padding-left: 1vh;
   padding-right: 1vh;
 }
 
-.Wx-Cam {
+.wx-cam {
   width: 100%;
 }
 
-.Tafs {
+.wx-tafs {
   padding-left: 1vh;
   padding-right: 1vh;
 }

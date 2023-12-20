@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './Weather.css';
 
-function App() {
+function Weather() {
   const [apiResponse, setApiResponse] = useState('');
   const [wxDiscussionResponse, setWxDiscussionResponse] = useState('');
   const [wxVisResponse, setWxVisResponse] = useState('');
@@ -31,16 +31,16 @@ function App() {
   const currentTimeString = new Date().toLocaleString('en-US', { hour12: false, timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }).replace(':', '') + 'Z';
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="wx">
+      <header className="wx-header">
         MyMinimums {currentTimeString}
       </header>
-      <img className="Wx-Vis" src={wxVisResponse} alt="Vis"/>
-      <div className="Wx-Disc">{wxDiscussionResponse}</div>
-      <img className="Wx-Cam" src="/api/today?source=wxcam" alt="Cam"/>
-      <pre className="Tafs">{apiResponse}</pre>
+      <img className="wx-vis" src={wxVisResponse} alt="Vis"/>
+      <div className="wx-disc">{wxDiscussionResponse}</div>
+      <img className="wx-cam" src="/api/today?source=wxcam" alt="Cam"/>
+      <pre className="wx-tafs">{apiResponse}</pre>
     </div>
   );
 }
 
-export default App;
+export default Weather;

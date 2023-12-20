@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import Weather from './Weather';
 
-test('renders learn react link', () => {
-  render(<App />);
+test('renders S43 info', () => {
+  render(<Weather />);
   setTimeout(() => {
     const linkElement = screen.getByText(/S43/i);
     expect(linkElement).toBeInTheDocument();
