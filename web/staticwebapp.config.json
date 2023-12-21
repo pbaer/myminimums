@@ -1,0 +1,14 @@
+{
+    "navigationFallback": {
+        "rewrite": "/index.html",
+        "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+    },
+    "routes": [
+    ],
+    "globalHeaders": {
+        "content-security-policy": "default-src https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:"
+    },
+    "mimeTypes": {
+        ".json": "text/json"
+    }
+}
