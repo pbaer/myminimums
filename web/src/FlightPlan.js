@@ -21,11 +21,6 @@ function degreesToFeet(degrees, latitude = 0) {
     return degrees * milesPerDegree * 5280;
 }
 
-function feetToDegrees(feet, latitude = 0) {
-    const milesPerDegree = Math.cos(latitude * Math.PI / 180) * 69;
-    return (feet / 5280) / milesPerDegree ;
-}
-
 const airport = {
     latitude: convertFromFAALat('48-9-38.7'),
     longitude: convertFromFAALon('122-9-32.5'),
@@ -41,7 +36,6 @@ const airport = {
 const RunwayDiagram = ({ airport }) => {
     const maxRunwayLengthInFeet = Math.max(...airport.runways.map(r => r.lengthInFeet));
     const viewBoxSizeInFeet = maxRunwayLengthInFeet * 1.4;
-    const scale = 1;
 
     const renderRunway = (runway) => {
         const { lengthInFeet, widthInFeet, orientationInTrueDegrees, baseLatitude, baseLongitude, baseId, reciprocalId } = runway;
