@@ -2,4 +2,4 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export { printToday } from './print.mjs';
+export { printToday } from './print';

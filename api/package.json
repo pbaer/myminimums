@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "func start",
+    "build": "tsc",
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
@@ -16,7 +17,9 @@
     "sunrise-sunset-js": "^2.2.1"
   },
   "devDependencies": {
-    "azure-functions-core-tools": "^4.x"
+    "azure-functions-core-tools": "^4.x",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "type": "module"
 }

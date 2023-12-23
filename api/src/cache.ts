@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { oneHourInMs } from './util.mjs';
+import { oneHourInMs } from './util';
 
 const isCacheCurrent = (data) => {
     if (!data || Date.now() - data.downloaded > oneHourInMs/2) {

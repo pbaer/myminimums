@@ -1,34 +1,41 @@
-import { parseTAFAsForecast, getCompositeForecastForDate } from 'metar-taf-parser';
-import fetch from 'node-fetch';
-import { applyMinimums } from './minimums.mjs';
-import { oneHourInMs, eachHourOfInterval } from './util.mjs';
-import { getCachedData, putCachedData } from './cache.mjs';
-
-export const addForecastByHour = async (airport) => {
-    let taf = getCachedData(airport.id);
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.addForecastByHour = void 0;
+const metar_taf_parser_1 = require("metar-taf-parser");
+const node_fetch_1 = __importDefault(require("node-fetch"));
+const minimums_1 = require("./minimums");
+const util_1 = require("./util");
+const cache_1 = require("./cache");
+const addForecastByHour = (airport) => __awaiter(void 0, void 0, void 0, function* () {
+    let taf = (0, cache_1.getCachedData)(airport.id);
     if (!taf) {
-        const response = await fetch(`https://api.metar-taf.com/taf?api_key=${process.env.METAR_TAF_API_KEY}&v=2.3&locale=en-US&id=${airport.id}`);
-        const body = await response.text();
+        const response = yield (0, node_fetch_1.default)(`https://api.metar-taf.com/taf?api_key=${process.env.METAR_TAF_API_KEY}&v=2.3&locale=en-US&id=${airport.id}`);
+        const body = yield response.text();
         taf = JSON.parse(body).taf;
         if (!taf) {
             throw new Error(`Failed to fetch TAF for ${airport.id}: ${body}`);
         }
-        putCachedData(airport.id, taf);
+        (0, cache_1.putCachedData)(airport.id, taf);
     }
-
     taf.starttime = new Date(taf.starttime * 1000 /* convert from UNIX time */);
     taf.endtime = new Date(taf.endtime * 1000 /* convert from UNIX time */);
-
-    const report = parseTAFAsForecast(taf.raw, { issued: taf.starttime });
-
-    const forecastByHour = eachHourOfInterval({
+    const report = (0, metar_taf_parser_1.parseTAFAsForecast)(taf.raw, { issued: taf.starttime });
+    const forecastByHour = (0, util_1.eachHourOfInterval)({
         start: report.start,
-        end: new Date(report.end.getTime() - oneHourInMs),
-      }).map((hour) => ({
-        hour,
-        ...getCompositeForecastForDate(hour, report),
-      }));
-
+        end: new Date(report.end.getTime() - util_1.oneHourInMs),
+    }).map((hour) => (Object.assign({ hour }, (0, metar_taf_parser_1.getCompositeForecastForDate)(hour, report))));
     const processHour = (hour) => {
         hour.wind = hour.base.wind;
         hour.visibility = hour.base.visibility;
@@ -50,7 +57,6 @@ export const addForecastByHour = async (airport) => {
         }
         hour.base = undefined;
         hour.additional = undefined;
-
         if (hour.wind.unit != 'KT') {
             throw new Error('Invalid wind speed unit');
         }
@@ -73,15 +79,14 @@ export const addForecastByHour = async (airport) => {
             hour.visibility.value = 10;
             hour.visibility.indicator = undefined;
         }
-    }
-
+    };
     for (const hour of forecastByHour) {
         processHour(hour);
-        applyMinimums(hour, airport);
+        (0, minimums_1.applyMinimums)(hour, airport);
     }
-
     airport.forecast = forecastByHour;
     airport.forecastRaw = taf.raw;
     airport.forecastStart = taf.starttime;
     airport.forecastEnd = taf.endtime;
-};
+});
+exports.addForecastByHour = addForecastByHour;

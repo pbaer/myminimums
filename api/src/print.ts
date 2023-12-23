@@ -1,10 +1,8 @@
-import pkg from 'colors';
-const { colors } = pkg;
 import { getSunrise, getSunset } from 'sunrise-sunset-js';
-import { airports } from './airports.mjs';
-import { Code } from './minimums.mjs';
-import { addForecastByHour } from './taf.mjs';
-import { oneHourInMs, oneDayInMs, oneYearInMs, toPaddedString, eachHourOfInterval, localDate } from './util.mjs';
+import { airports } from './airports';
+import { Code } from './minimums';
+import { addForecastByHour } from './taf';
+import { oneHourInMs, oneDayInMs, oneYearInMs, toPaddedString, eachHourOfInterval, localDate } from './util';
 
 const charForCode = (code) => {
     if (code === Code.Red) {

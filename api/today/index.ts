@@ -1,5 +1,5 @@
-import { printToday } from '../src/index.mjs';
-import { wxDiscussion, wxVis, wxCam } from '../src/wx.mjs';
+import { printToday } from '../src/index';
+import { wxDiscussion, wxVis, wxCam } from '../src/wx';
 
 export default async function (context, req) {
     context.log('Starting API execution for /today');
