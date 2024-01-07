@@ -5,21 +5,22 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "func start",
     "build": "tsc",
+    "watch": "tsc -w",
+    "prestart": "npm run build",
+    "start": "func start",
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "colors": "^1.4.0",
-    "dotenv": "^16.0.3",
-    "metar-taf-parser": "^6.1.4",
-    "node-fetch": "^3.2.10",
+    "dotenv": "^16.3.1",
+    "metar-taf-parser": "^8.0.4",
+    "node-fetch": "^3.3.2",
     "sunrise-sunset-js": "^2.2.1"
   },
   "devDependencies": {
+    "@azure/functions": "^3.0.0",
+    "@types/node": "16.x",
     "azure-functions-core-tools": "^4.x",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
-  },
-  "type": "module"
+    "typescript": "^4.0.0"
+  }
 }

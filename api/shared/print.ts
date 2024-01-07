@@ -32,14 +32,14 @@ const isDaylightHour = (hour) => {
 };
 
 export const printToday = async (utcOffset) => {
-    const promises = [];
+    const promises: Promise<void>[] = [];
     for (const airport of airports.filter(x => x.taf)) {
         promises.push(addForecastByHour(airport));
     }
     await Promise.all(promises);
 
     let output = '';
-    const addLine = (line) => {
+    const addLine = (line?) => {
         output += `${line ?? ''}\n`;
     };
 
@@ -61,7 +61,7 @@ export const printToday = async (utcOffset) => {
     // Don't display more than 26h of forecast
     end = new Date(Math.min(end.getTime(), start.getTime() + 26 * oneHourInMs));
 
-    const zones = new Set();
+    const zones = new Set<string>();
     airports.forEach(x => zones.add(x.zone));
 
     const hours = eachHourOfInterval({
@@ -72,7 +72,7 @@ export const printToday = async (utcOffset) => {
     let separatorLine = '+------+';
     hours.forEach(_ => separatorLine += '------+');
 
-    let headerLines = [];
+    let headerLines: string[] = [];
     headerLines.push('       +');
     headerLines.push('       |');
     headerLines.push('       |');

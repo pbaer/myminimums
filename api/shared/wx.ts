@@ -1,7 +1,8 @@
-import fetch from 'node-fetch';
+const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { getCachedData, putCachedData } from './cache';
 
 export const wxDiscussion = async () => {
+    const fetch = (await loadNodeFetch()).default;
     let wxdisc = getCachedData('wxdisc');
     if (!wxdisc) {
         const response = await fetch('https://a.atmos.washington.edu/data/disc_report.html');
@@ -20,6 +21,7 @@ export const wxDiscussion = async () => {
 };
 
 export const wxVis = async () => {
+    const fetch = (await loadNodeFetch()).default;
     let wxvis = getCachedData('wxvis');
     if (!wxvis) {
         const response = await fetch('https://a.atmos.washington.edu/~ovens/wxloop.cgi?vis1km_fog+1');
@@ -37,6 +39,7 @@ export const wxVis = async () => {
 };
 
 export const wxCam = async () => {
+    const fetch = (await loadNodeFetch()).default;
     let wxcam = getCachedData('wxcam');
     if (!wxcam) {
         const response = await fetch('http://www.harveyfield.com/WebcamImageHandler.ashx');

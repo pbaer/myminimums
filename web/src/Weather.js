@@ -7,13 +7,13 @@ function Weather() {
   const [wxVisResponse, setWxVisResponse] = useState('');
 
   useEffect(() => {
-    fetch('/api/today?utcOffset=-8')
+    fetch('/api/weather?utcOffset=-8')
       .then(response => response.text())
       .then(data => setApiResponse(data));
   }, []);
 
   useEffect(() => {
-    fetch('/api/today?source=wxdisc')
+    fetch('/api/weather?source=wxdisc')
       .then(response => response.text())
       .then(data => setWxDiscussionResponse(data.split('\n\n').map((paragraph, index) => {
         return paragraph ? (
@@ -23,7 +23,7 @@ function Weather() {
   }, []);
 
   useEffect(() => {
-    fetch('/api/today?source=wxvis')
+    fetch('/api/weather?source=wxvis')
       .then(response => response.text())
       .then(data => setWxVisResponse(data));
   }, []);
@@ -37,7 +37,7 @@ function Weather() {
       </header>
       <img className="wx-vis" src={wxVisResponse} alt="Vis"/>
       <div className="wx-disc">{wxDiscussionResponse}</div>
-      <img className="wx-cam" src="/api/today?source=wxcam" alt="Cam"/>
+      <img className="wx-cam" src="/api/weather?source=wxcam" alt="Cam"/>
       <pre className="wx-tafs">{apiResponse}</pre>
     </div>
   );

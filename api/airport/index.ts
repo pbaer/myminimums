@@ -1,16 +1,17 @@
-export default async function (context, req) {
-    context.log('Starting API execution for /airport');
-    try {
-        const id = req.query?.id ?? '';
-        context.res = {
-            status: 200,
-            body: `Info for ${id}`
-        };
-    } catch (err) {
-        context.res = {
-            status: 500,
-            body: 'Error'
-        };
-        context.log(`Error: ${err}\n${err.stack}`);
-    }
-}
+import { AzureFunction, Context, HttpRequest } from "@azure/functions"
+
+const airportHttpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+    context.log('HTTP trigger function processed a request.');
+    const name = (req.query.name || (req.body && req.body.name));
+    const responseMessage = name
+        ? "Hello, " + name + ". This HTTP triggered function executed successfully."
+        : "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.";
+
+    context.res = {
+        // status: 200, /* Defaults to 200 */
+        body: responseMessage
+    };
+
+};
+
+export default airportHttpTrigger;

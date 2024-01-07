@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.airportsXXX = exports.airports = void 0;
-exports.airports = [
+export const airports: any[] = [
     {
         id: 'KS43',
         runwaysTrue: [165],
@@ -166,8 +163,9 @@ exports.airports = [
         city: 'Pasco'
     }
 ];
+
 // For testing
-exports.airportsXXX = [
+export const airportsXXX = [
     {
         id: 'KCLM',
         taf: true

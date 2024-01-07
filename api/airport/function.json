@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "authLevel": "Anonymous",
+      "authLevel": "function",
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
@@ -15,5 +15,6 @@
       "direction": "out",
       "name": "res"
     }
-  ]
+  ],
+  "scriptFile": "../dist/airport/index.js"
 }

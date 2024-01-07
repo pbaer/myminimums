@@ -1,8 +1,9 @@
-import { printToday } from '../src/index';
-import { wxDiscussion, wxVis, wxCam } from '../src/wx';
+import { AzureFunction, Context, HttpRequest } from "@azure/functions"
+import { printToday } from '../shared/index';
+import { wxDiscussion, wxVis, wxCam } from '../shared/wx';
 
-export default async function (context, req) {
-    context.log('Starting API execution for /today');
+const weatherHttpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+    context.log('Starting API execution for ' + req.url);
     try {
         const source = req.query?.source ?? '';
         if (source === 'wxdisc') {
@@ -29,11 +30,13 @@ export default async function (context, req) {
                 body: await printToday(utcOffset)
             };
         }
-    } catch (err) {
+    } catch (err: any) {
         context.res = {
             status: 500,
             body: 'Error'
         };
         context.log(`Error: ${err}\n${err.stack}`);
     }
-}
+};
+
+export default weatherHttpTrigger;

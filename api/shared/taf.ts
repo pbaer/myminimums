@@ -1,10 +1,13 @@
-import { parseTAFAsForecast, getCompositeForecastForDate } from 'metar-taf-parser';
-import fetch from 'node-fetch';
+const loadMetarTafParser = require('../../shared/metar-taf-parser-wrapper');
+const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { applyMinimums } from './minimums';
 import { oneHourInMs, eachHourOfInterval } from './util';
 import { getCachedData, putCachedData } from './cache';
 
 export const addForecastByHour = async (airport) => {
+    const metarTafParser = await loadMetarTafParser();
+    const fetch = (await loadNodeFetch()).default;
+
     let taf = getCachedData(airport.id);
     if (!taf) {
         const response = await fetch(`https://api.metar-taf.com/taf?api_key=${process.env.METAR_TAF_API_KEY}&v=2.3&locale=en-US&id=${airport.id}`);
@@ -19,21 +22,21 @@ export const addForecastByHour = async (airport) => {
     taf.starttime = new Date(taf.starttime * 1000 /* convert from UNIX time */);
     taf.endtime = new Date(taf.endtime * 1000 /* convert from UNIX time */);
 
-    const report = parseTAFAsForecast(taf.raw, { issued: taf.starttime });
+    const report = metarTafParser.parseTAFAsForecast(taf.raw, { issued: taf.starttime });
 
     const forecastByHour = eachHourOfInterval({
         start: report.start,
         end: new Date(report.end.getTime() - oneHourInMs),
       }).map((hour) => ({
         hour,
-        ...getCompositeForecastForDate(hour, report),
+        ...metarTafParser.getCompositeForecastForDate(hour, report),
       }));
 
     const processHour = (hour) => {
-        hour.wind = hour.base.wind;
-        hour.visibility = hour.base.visibility;
-        hour.weather = hour.base.weatherConditions;
-        hour.clouds = hour.base.clouds;
+        hour.wind = hour.prevailing.wind;
+        hour.visibility = hour.prevailing.visibility;
+        hour.weather = hour.prevailing.weatherConditions;
+        hour.clouds = hour.prevailing.clouds;
         for (const add of hour.additional || []) {
             if (add.wind) {
                 hour.wind = add.wind;
@@ -48,8 +51,8 @@ export const addForecastByHour = async (airport) => {
                 hour.clouds = add.clouds;
             }
         }
-        hour.base = undefined;
-        hour.additional = undefined;
+        hour.prevailing = undefined;
+        hour.supplemental = undefined;
 
         if (hour.wind.unit != 'KT') {
             throw new Error('Invalid wind speed unit');
