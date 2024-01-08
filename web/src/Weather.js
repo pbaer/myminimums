@@ -36,8 +36,17 @@ function Weather() {
         MyMinimums {currentTimeString}
       </header>
       <img className="wx-vis" src={wxVisResponse} alt="Vis"/>
-      <div className="wx-disc">{wxDiscussionResponse}</div>
-      <img className="wx-cam" src="/api/weather?source=wxcam" alt="Cam"/>
+      <div className="grid-container">
+        <div className="grid-item">
+          <div className="wx-disc">{wxDiscussionResponse}</div>
+        </div>
+        <div className="grid-item">
+          <img className="wx-cam" src="/api/weather?source=wxcam" alt="Cam"/>
+        </div>
+        <div className="grid-item">DDD</div>
+        <div className="grid-item">EEE</div>
+        <div className="grid-item">FFF</div>
+      </div>
       <pre className="wx-tafs">{apiResponse}</pre>
     </div>
   );
