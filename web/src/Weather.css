@@ -1,7 +1,7 @@
 .grid-container {
   display: grid;
-  grid-gap: 10px; /* space between grid items */
-  padding: 10px; /* optional: padding around the entire grid */
+  grid-gap: 7px; /* space between grid items */
+  padding: 7px; /* optional: padding around the entire grid */
   box-sizing: border-box; /* Include padding in the total width and height */
   width: 100%;
 }
@@ -11,19 +11,19 @@
   grid-template-columns: repeat(1, 1fr);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 800px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1200px) {
   .grid-container {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1600px) {
   .grid-container {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -31,7 +31,7 @@
 
 .grid-item {
   background-color: #f0f0f0; /* Just example styling */
-  padding: 20px; /* Making items look nice */
+  padding: 10px; /* Making items look nice */
   border: 1px solid #ccc; /* Giving a border to items */
 }
 

@@ -41,11 +41,15 @@ function Weather() {
           <div className="wx-disc">{wxDiscussionResponse}</div>
         </div>
         <div className="grid-item">
-          <img className="wx-cam" src="/api/weather?source=wxcam" alt="Cam"/>
+          Harvey Field
+          <img className="wx-cam" src="/api/weather?source=wxcam&airport=S43" alt="Cam"/>
+          Arlington
+          <img className="wx-cam" src="/api/weather?source=wxcam&airport=AWO" alt="Cam"/>
+          Skagit Regional
+          <img className="wx-cam" src="/api/weather?source=wxcam&airport=BVS" alt="Cam"/>
+          Paine Field
+          <img className="wx-cam" src="/api/weather?source=wxcam&airport=PAE" alt="Cam"/>
         </div>
-        <div className="grid-item">DDD</div>
-        <div className="grid-item">EEE</div>
-        <div className="grid-item">FFF</div>
       </div>
       <pre className="wx-tafs">{apiResponse}</pre>
     </div>

@@ -20,7 +20,7 @@ const weatherHttpTrigger: AzureFunction = async function (context: Context, req:
             context.res = {
                 status: 200,
                 headers: { 'content-type': 'image/jpeg' },
-                body: await wxCam(),
+                body: await wxCam(req.query?.airport),
                 isRaw: true
             };
         } else {
