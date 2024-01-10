@@ -4,7 +4,8 @@ import './Weather.css';
 function Weather() {
   const [apiResponse, setApiResponse] = useState('');
   const [wxDiscussionResponse, setWxDiscussionResponse] = useState('');
-  const [wxVisResponse, setWxVisResponse] = useState('');
+  const [wxVisibleResponse, setWxVisibleResponse] = useState('');
+  const [wxRadarResponse, setWxRadarResponse] = useState('');
 
   useEffect(() => {
     fetch('/api/weather?utcOffset=-8')
@@ -23,9 +24,15 @@ function Weather() {
   }, []);
 
   useEffect(() => {
-    fetch('/api/weather?source=wxvis')
+    fetch('/api/weather?source=wximg&type=visible')
       .then(response => response.text())
-      .then(data => setWxVisResponse(data));
+      .then(data => setWxVisibleResponse(data));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/weather?source=wximg&type=radar')
+      .then(response => response.text())
+      .then(data => setWxRadarResponse(data));
   }, []);
 
   const currentTimeString = new Date().toLocaleString('en-US', { hour12: false, timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }).replace(':', '') + 'Z';
@@ -35,7 +42,14 @@ function Weather() {
       <header className="wx-header">
         MyMinimums {currentTimeString}
       </header>
-      <img className="wx-vis" src={wxVisResponse} alt="Vis"/>
+      <div className="grid-container">
+        <div className="grid-item">
+          <img className="wx-img" src={wxVisibleResponse} alt="Imagery"/>
+        </div>
+        <div className="grid-item">
+          <img className="wx-img" src={wxRadarResponse} alt="Imagery"/>
+        </div>
+      </div>
       <div className="grid-container">
         <div className="grid-item">
           <div className="wx-disc">{wxDiscussionResponse}</div>

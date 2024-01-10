@@ -23,12 +23,6 @@
   }
 }
 
-@media (min-width: 1600px) {
-  .grid-container {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
 .grid-item {
   background-color: #f0f0f0; /* Just example styling */
   padding: 10px; /* Making items look nice */
@@ -53,7 +47,7 @@
   color: #61dafb;
 }
 
-.wx-vis {
+.wx-img {
   width: 100%;
 }
 

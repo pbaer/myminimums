@@ -1,7 +1,7 @@
 const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { getCachedData, putCachedData } from './cache';
 
-export const wxDiscussion = async () => {
+export const wxDisc = async () => {
     let wxdisc = getCachedData('wxdisc');
     if (!wxdisc) {
         const fetch = (await loadNodeFetch()).default;
@@ -20,22 +20,37 @@ export const wxDiscussion = async () => {
     return text;
 };
 
-export const wxVis = async () => {
-    let wxvis = getCachedData('wxvis');
-    if (!wxvis) {
+export const wxImg = async (imgType: string) => {
+    const imgTypes = {
+        visible: 'vis1km_fog',
+        radar: 'atx_ncr',
+    }
+    if (!imgTypes[imgType]) {
+        throw new Error(`No image type for ${imgType}`);
+    }
+    imgType = imgTypes[imgType];
+    const cacheKey = `wximg-${imgType}`;
+    let wximg = getCachedData(cacheKey);
+    if (!wximg) {
         const fetch = (await loadNodeFetch()).default;
-        const response = await fetch('https://a.atmos.washington.edu/~ovens/wxloop.cgi?vis1km_fog+1');
+        const response = await fetch(`https://a.atmos.washington.edu/~ovens/wxloop.cgi?${imgType}+1`);
         const text = await response.text();
-        const start = 'listArray[1]="/images/vis1km_fog/';
+        let prefix;
+        if (imgType === 'atx_ncr') {
+            prefix = 'images/newnexrad/ATX/NCR';
+        } else {
+            prefix = `images/${imgType}`;
+        }
+        const start = `listArray[1]="/${prefix}/`;
         const startIndex = text.indexOf(start) + start.length;
         const end = '";';
         const endIndex = text.indexOf(end, startIndex);
-        wxvis = {
-            url: 'https://a.atmos.washington.edu/images/vis1km_fog/' + text.substring(startIndex, endIndex)
+        wximg = {
+            url: `https://a.atmos.washington.edu/${prefix}/` + text.substring(startIndex, endIndex)
         }
-        putCachedData('wxvis', wxvis);
+        putCachedData(cacheKey, wximg);
     }
-    return wxvis.url;
+    return wximg.url;
 };
 
 export const wxCam = async (airport: string) => {
