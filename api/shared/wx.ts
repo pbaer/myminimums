@@ -22,8 +22,9 @@ export const wxDisc = async () => {
 
 export const wxImg = async (imgType: string) => {
     const imgTypes = {
-        visible: 'vis1km_fog',
+        ir: 'ir_enhanced',
         radar: 'atx_ncr',
+        visible: 'vis1km_fog',
     }
     if (!imgTypes[imgType]) {
         throw new Error(`No image type for ${imgType}`);

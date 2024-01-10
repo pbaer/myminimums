@@ -6,6 +6,7 @@ function Weather() {
   const [wxDiscussionResponse, setWxDiscussionResponse] = useState('');
   const [wxVisibleResponse, setWxVisibleResponse] = useState('');
   const [wxRadarResponse, setWxRadarResponse] = useState('');
+  const [wxIRResponse, setWxIRResponse] = useState('');
 
   useEffect(() => {
     fetch('/api/weather?utcOffset=-8')
@@ -35,6 +36,12 @@ function Weather() {
       .then(data => setWxRadarResponse(data));
   }, []);
 
+  useEffect(() => {
+    fetch('/api/weather?source=wximg&type=ir')
+      .then(response => response.text())
+      .then(data => setWxIRResponse(data));
+  }, []);
+
   const currentTimeString = new Date().toLocaleString('en-US', { hour12: false, timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }).replace(':', '') + 'Z';
 
   return (
@@ -48,6 +55,9 @@ function Weather() {
         </div>
         <div className="grid-item">
           <img className="wx-img" src={wxRadarResponse} alt="Imagery"/>
+        </div>
+        <div className="grid-item">
+          <img className="wx-img" src={wxIRResponse} alt="Imagery"/>
         </div>
       </div>
       <div className="grid-container">
