@@ -23,3 +23,9 @@
     padding-left: 6px;
     padding-bottom: 3px;
 }
+
+@media (max-width: 500px) {
+    .metar {
+        font-size: 8pt;
+    }
+}
