@@ -1,6 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { printToday } from '../shared/index';
-import { wxDisc, wxImg, wxCam } from '../shared/wx';
+import { wxDisc, wxImg, wxCam, wxMetar } from '../shared/wx';
 
 const weatherHttpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('Starting API execution for ' + req.url);
@@ -22,6 +22,11 @@ const weatherHttpTrigger: AzureFunction = async function (context: Context, req:
                 headers: { 'content-type': 'image/jpeg' },
                 body: await wxCam(req.query?.airport),
                 isRaw: true
+            };
+        } else if (source == 'wxmetar') {
+            context.res = {
+                status: 200,
+                body: await wxMetar(req.query?.airport)
             };
         } else {
             const utcOffset = req.query && req.query.utcOffset;

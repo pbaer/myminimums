@@ -56,10 +56,16 @@ export const wxImg = async (imgType: string) => {
 
 export const wxCam = async (airport: string) => {
     const camUrls = {
-        AWO: 'https://images.wsdot.wa.gov/airports/ArlRW11.jpg',
-        BVS: 'http://images.wsdot.wa.gov/airports/SkagitRW29.jpg',
-        PAE: 'https://www.snoco.org/axis-cgi/jpg/image.cgi?resolution=800x600',
-        S43: 'http://www.harveyfield.com/WebcamImageHandler.ashx',
+        '74S': 'https://images.wsdot.wa.gov/airports/anarunwayn.jpg',
+        'KAWO': 'https://images.wsdot.wa.gov/airports/ArlRW11.jpg',
+        'KBFI': 'https://kbfi.wasar.org/south.jpg',
+        'KBLI': 'https://images.wsdot.wa.gov/airports/bham.jpg',
+        'KBVS': 'http://images.wsdot.wa.gov/airports/SkagitRW29.jpg',
+        'KFHR': 'https://images.wsdot.wa.gov/airports/friday2.jpg',
+        'KORS': 'https://images.wsdot.wa.gov/airports/OrcasSW.jpg',
+        'KPAE': 'https://www.snoco.org/axis-cgi/jpg/image.cgi?resolution=800x600',
+        'KPWT': 'http://images.wsdot.wa.gov/airports/bremertonRWN.jpg',
+        'S43': 'http://www.harveyfield.com/WebcamImageHandler.ashx',
     };
     if (!camUrls[airport]) {
         throw new Error(`No webcam URL for ${airport}`);
@@ -78,3 +84,18 @@ export const wxCam = async (airport: string) => {
     }
     return Buffer.from(wxcam.image, 'base64');
 };
+
+export const wxMetar = async (airport: string) => {
+    const cacheKey = `wxmetar-${airport}`;
+    let wxMetar = getCachedData(cacheKey);
+    if (!wxMetar) {
+        const fetch = (await loadNodeFetch()).default;
+        const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport}`);
+        const body = await response.text();
+        wxMetar = {
+            text: body
+        };
+        putCachedData(cacheKey, wxMetar);
+    }
+    return wxMetar.text;
+}

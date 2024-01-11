@@ -1,6 +1,6 @@
 export const airports: any[] = [
     {
-        id: 'KS43',
+        id: 'S43',
         runwaysTrue: [165],
         taf: true,
         local: true,

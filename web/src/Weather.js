@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AirportWeather } from './AirportWeather';
 import './Weather.css';
 
 function Weather() {
@@ -44,6 +45,23 @@ function Weather() {
 
   const currentTimeString = new Date().toLocaleString('en-US', { hour12: false, timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }).replace(':', '') + 'Z';
 
+  const airports = {
+    pugetSound: [
+      { id: 'S43', name: 'Harvey Field' },
+      { id: 'KPAE', name: 'Paine Field' },
+      { id: 'KAWO', name: 'Arlington Municipal' },
+      { id: 'KBFI', name: 'Boeing Field' },
+      { id: 'KPWT', name: 'Bremerton National' },
+    ],
+    islands: [
+      { id: 'KBVS', name: 'Skagit Regional' },
+      { id: '74S', name: 'Anacortes' },
+      { id: 'KBLI', name: 'Bellingham International' },
+      { id: 'KORS', name: 'Orcas Island' },
+      { id: 'KFHR', name: 'Friday Harbor' },
+    ]
+  };
+
   return (
     <div className="wx">
       <header className="wx-header">
@@ -65,14 +83,16 @@ function Weather() {
           <div className="wx-disc">{wxDiscussionResponse}</div>
         </div>
         <div className="grid-item">
-          Harvey Field
-          <img className="wx-cam" src="/api/weather?source=wxcam&airport=S43" alt="Cam"/>
-          Arlington
-          <img className="wx-cam" src="/api/weather?source=wxcam&airport=AWO" alt="Cam"/>
-          Skagit Regional
-          <img className="wx-cam" src="/api/weather?source=wxcam&airport=BVS" alt="Cam"/>
-          Paine Field
-          <img className="wx-cam" src="/api/weather?source=wxcam&airport=PAE" alt="Cam"/>
+          <div className="zone">Puget Sound</div>
+          {airports.pugetSound.map((airport) => (
+            <AirportWeather airport={airport} />
+          ))}
+        </div>
+        <div className="grid-item">
+          <div className="zone">Islands</div>
+          {airports.islands.map((airport) => (
+            <AirportWeather airport={airport} />
+          ))}
         </div>
       </div>
       <pre className="wx-tafs">{apiResponse}</pre>

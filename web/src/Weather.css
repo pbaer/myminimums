@@ -55,11 +55,14 @@
   padding-right: 1vh;
 }
 
-.wx-cam {
-  width: 100%;
-}
-
 .wx-tafs {
   padding-left: 1vh;
   padding-right: 1vh;
+}
+
+.zone {
+  font-size: 18pt;
+  font-weight: bold;
+  padding: 6px;
+  text-align: center;
 }

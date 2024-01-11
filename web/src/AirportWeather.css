@@ -1,0 +1,25 @@
+.airport {
+    padding-bottom: 10px;
+}
+
+.cam {
+    width: 100%;
+}
+
+.name {
+    font-size: 14pt;
+    font-weight: bold;
+    color: white;
+    background-color: #282c34;
+    padding-left: 6px;
+    padding-top: 3px;
+}
+
+.metar {
+    font-family: monospace;
+    font-size: 12pt;
+    color: white;
+    background-color: #282c34;
+    padding-left: 6px;
+    padding-bottom: 3px;
+}

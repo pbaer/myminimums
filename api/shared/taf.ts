@@ -10,7 +10,7 @@ export const addForecastByHour = async (airport) => {
 
     let taf = getCachedData(airport.id);
     if (!taf) {
-        const response = await fetch(`https://api.metar-taf.com/taf?api_key=${process.env.METAR_TAF_API_KEY}&v=2.3&locale=en-US&id=${airport.id}`);
+        const response = await fetch(`https://api.metar-taf.com/taf?api_key=${process.env.METAR_TAF_API_KEY}&v=2.3&locale=en-US&id=${airport.id.length === 3 ? 'K' : ''}${airport.id}`);
         const body = await response.text();
         taf = JSON.parse(body).taf;
         if (!taf) {
