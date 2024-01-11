@@ -50,13 +50,15 @@ function Weather() {
       { id: 'S43', name: 'Harvey Field' },
       { id: 'KPAE', name: 'Paine Field' },
       { id: 'KAWO', name: 'Arlington Municipal' },
+      { id: 'K0S9', name: 'Jefferson County International' },
       { id: 'KBFI', name: 'Boeing Field' },
       { id: 'KPWT', name: 'Bremerton National' },
+      { id: 'KOLM', name: 'Olympia Regional' }
     ],
     islands: [
       { id: 'KBVS', name: 'Skagit Regional' },
-      { id: '74S', name: 'Anacortes' },
       { id: 'KBLI', name: 'Bellingham International' },
+      { id: 'KNUW', name: 'Whidbey Island Naval Air Station' },
       { id: 'KORS', name: 'Orcas Island' },
       { id: 'KFHR', name: 'Friday Harbor' },
     ]
