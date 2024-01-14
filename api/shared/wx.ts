@@ -57,14 +57,14 @@ export const wxImg = async (imgType: string) => {
 export const wxCam = async (airport: string) => {
     const camUrls = {
         '74S': 'https://images.wsdot.wa.gov/airports/anarunwayn.jpg',
-        'K0S9': 'https://images.wsdot.wa.gov/airports/porttownsendE.jpg',
+        'K0S9': 'https://images.wsdot.wa.gov/airports/PortTownsendW.jpg',
         'KAWO': 'https://images.wsdot.wa.gov/airports/ArlRW11.jpg',
         'KBFI': 'https://kbfi.wasar.org/south.jpg',
         'KBLI': 'https://images.wsdot.wa.gov/airports/bham.jpg',
         'KBVS': 'http://images.wsdot.wa.gov/airports/SkagitRW29.jpg',
         'KFHR': 'https://images.wsdot.wa.gov/airports/friday2.jpg',
         'KNUW': 'https://images.wsdot.wa.gov/nw/020vc03472.jpg',
-        'KOLM': 'https://images.wsdot.wa.gov/airports/OlySW.jpg',
+        'KOLM': 'https://images.wsdot.wa.gov/airports/OlySouthR.jpg',
         'KORS': 'https://images.wsdot.wa.gov/airports/OrcasSW.jpg',
         'KPAE': 'https://www.snoco.org/axis-cgi/jpg/image.cgi?resolution=800x600',
         'KPWT': 'http://images.wsdot.wa.gov/airports/bremertonRWN.jpg',

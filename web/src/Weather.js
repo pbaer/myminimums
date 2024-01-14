@@ -85,13 +85,11 @@ function Weather() {
           <div className="wx-disc">{wxDiscussionResponse}</div>
         </div>
         <div className="grid-item">
-          <div className="zone">Puget Sound</div>
           {airports.pugetSound.map((airport) => (
             <AirportWeather airport={airport} />
           ))}
         </div>
         <div className="grid-item">
-          <div className="zone">Islands</div>
           {airports.islands.map((airport) => (
             <AirportWeather airport={airport} />
           ))}
