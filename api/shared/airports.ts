@@ -1,8 +1,40 @@
-export const airports: any[] = [
+export interface ICurrentWeather {
+    metar: string;
+    decoded: any;
+};
+
+export interface IForecastWeather {
+    taf: string;
+    decodedHours: any[];
+};
+
+export interface IWeather {
+    current?: ICurrentWeather;
+    forecast?: IForecastWeather;
+};
+
+export interface IAirport {
+    id: string;
+    idForMetar?: string;
+    idForTaf?: string;
+    runwaysTrue?: number[];
+    hasMetar?: boolean;
+    hasTaf?: boolean;
+    local?: boolean;
+    zone: string;
+    name: string;
+    city: string;
+    weather?: IWeather;
+};
+
+export const airports: IAirport[] = [
     {
         id: 'S43',
+        idForMetar: 'KPAE',
+        idForTaf: 'KPAE',
         runwaysTrue: [165],
-        taf: true,
+        hasMetar: true,
+        hasTaf: true,
         local: true,
         zone: 'Home',
         name: 'Harvey Field',
@@ -11,7 +43,8 @@ export const airports: any[] = [
     {
         id: 'KPAE',
         runwaysTrue: [179],
-        taf: true,
+        hasMetar: true,
+        hasTaf: true,
         zone: 'Puget Sound',
         name: 'Paine Field',
         city: 'Everett'
@@ -19,7 +52,8 @@ export const airports: any[] = [
     {
         id: 'KPWT',
         runwaysTrue: [33],
-        taf: true,
+        hasMetar: true,
+        hasTaf: true,
         zone: 'Puget Sound',
         name: 'Bremerton National Airport',
         city: 'Bremerton'
@@ -27,36 +61,22 @@ export const airports: any[] = [
     {
         id: 'KBFI',
         runwaysTrue: [150],
-        taf: true,
+        hasTaf: true,
         zone: 'Puget Sound',
         name: 'Boeing Field',
         city: 'Seattle'
     },
     {
         id: 'KSEA',
-        taf: true,
+        hasTaf: true,
         zone: 'Puget Sound',
         name: 'Seattle-Tacoma International Airport',
         city: 'Seattle'
     },
     {
-        id: 'KTCM',
-        taf: true,
-        zone: 'Puget Sound',
-        name: 'McChord Field',
-        city: 'Lakewood'
-    },
-    {
-        id: 'KGRF',
-        taf: true,
-        zone: 'Puget Sound',
-        name: 'Gray Army Airfield',
-        city: 'Lakewood'
-    },
-    {
         id: 'KOLM',
         runwaysTrue: [11, 104],
-        taf: true,
+        hasTaf: true,
         zone: 'Puget Sound',
         name: 'Olympia Regional Airport',
         city: 'Olympia'
@@ -64,14 +84,14 @@ export const airports: any[] = [
     {
         id: 'KCLM',
         runwaysTrue: [105],
-        taf: true,
+        hasTaf: true,
         zone: 'Islands',
         name: 'William R. Fairchild International Airport',
         city: 'Port Angeles'
     },
     {
         id: 'CYYJ',
-        taf: true,
+        hasTaf: true,
         zone: 'Islands',
         name: 'Victoria International Airport',
         city: 'Victoria'
@@ -79,14 +99,14 @@ export const airports: any[] = [
     {
         id: 'KBLI',
         runwaysTrue: [0],
-        taf: true,
+        hasTaf: true,
         zone: 'Islands',
         name: 'Bellingham International Airport',
         city: 'Bellingham'
     },
     {
         id: 'KNUW',
-        taf: true,
+        hasTaf: true,
         zone: 'Islands',
         name: 'Naval Air Station Whidbey Island',
         city: 'Oak Harbor'
@@ -94,7 +114,7 @@ export const airports: any[] = [
     {
         id: 'KHQM',
         runwaysTrue: [79],
-        taf: true,
+        hasTaf: true,
         zone: 'Coast',
         name: 'Bowerman Airport',
         city: 'Hoquiam'
@@ -102,14 +122,14 @@ export const airports: any[] = [
     {
         id: 'KAST',
         runwaysTrue: [95, 154],
-        taf: true,
+        hasTaf: true,
         zone: 'Coast',
         name: 'Astoria Regional Airport',
         city: 'Astoria'
     },
     {
         id: 'KPDX',
-        taf: true,
+        hasTaf: true,
         zone: 'Gorge',
         name: 'Portland International Airport',
         city: 'Portland'
@@ -117,7 +137,7 @@ export const airports: any[] = [
     {
         id: 'KTTD',
         runwaysTrue: [89],
-        taf: true,
+        hasTaf: true,
         zone: 'Gorge',
         name: 'Portland Troutdale Airport',
         city: 'Troutdale'
@@ -125,7 +145,7 @@ export const airports: any[] = [
     {
         id: 'KDLS',
         runwaysTrue: [88, 145],
-        taf: true,
+        hasTaf: true,
         zone: 'Gorge',
         name: 'Columbia Gorge Regional Airport',
         city: 'The Dalles'
@@ -133,7 +153,7 @@ export const airports: any[] = [
     {
         id: 'KEAT',
         runwaysTrue: [135],
-        taf: true,
+        hasTaf: true,
         zone: 'Eastern WA',
         name: 'Pangborn Memorial Airport',
         city: 'Wenatchee'
@@ -141,7 +161,7 @@ export const airports: any[] = [
     {
         id: 'KYKM',
         runwaysTrue: [110],
-        taf: true,
+        hasTaf: true,
         zone: 'Eastern WA',
         name: 'Yakima Air Terminal',
         city: 'Yakima'
@@ -149,7 +169,7 @@ export const airports: any[] = [
     {
         id: 'KSFF',
         runwaysTrue: [54],
-        taf: true,
+        hasTaf: true,
         zone: 'Eastern WA',
         name: 'Felts Field',
         city: 'Spokane'
@@ -157,7 +177,7 @@ export const airports: any[] = [
     {
         id: 'KPSC',
         runwaysTrue: [45, 135],
-        taf: true,
+        hasTaf: true,
         zone: 'Eastern WA',
         name: 'Tri-Cities Airport',
         city: 'Pasco'
@@ -165,9 +185,12 @@ export const airports: any[] = [
 ];
 
 // For testing
-export const airportsXXX = [
+export const airportsXXX: IAirport[] = [
     {
         id: 'KCLM',
-        taf: true
+        hasTaf: true,
+        zone: 'Test Zone',
+        name: 'Test Airport',
+        city: 'Test City'
     }
 ];

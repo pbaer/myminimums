@@ -1,7 +1,7 @@
 import { getSunrise, getSunset } from 'sunrise-sunset-js';
-import { airports } from './airports';
+import { IAirport, airports } from './airports';
 import { Code } from './minimums';
-import { addForecastByHour } from './taf';
+import { addWeather } from './taf';
 import { oneHourInMs, oneDayInMs, oneYearInMs, toPaddedString, eachHourOfInterval, localDate } from './util';
 
 const charForCode = (code) => {
@@ -33,8 +33,8 @@ const isDaylightHour = (hour) => {
 
 export const printToday = async (utcOffset) => {
     const promises: Promise<void>[] = [];
-    for (const airport of airports.filter(x => x.taf)) {
-        promises.push(addForecastByHour(airport));
+    for (const airport of airports.filter(x => x.hasTaf)) {
+        promises.push(addWeather(airport));
     }
     await Promise.all(promises);
 
@@ -46,12 +46,14 @@ export const printToday = async (utcOffset) => {
     let start = new Date(Date.now() + oneYearInMs);
     let end = new Date(Date.now() - oneYearInMs);
 
-    for (const airport of airports.filter(x => x.taf)) {
-        if (airport.forecastStart < start) {
-            start = airport.forecastStart;
+    for (const airport of airports.filter(x => x.hasTaf && x.weather?.forecast?.decodedHours?.length! > 0)) {
+        const firstHour = new Date(airport.weather!.forecast!.decodedHours[0].dateISO);
+        if (firstHour < start) {
+            start = firstHour;
         }
-        if (airport.forecastEnd > end) {
-            end = airport.forecastEnd;
+        const lastHour = new Date(airport.weather!.forecast!.decodedHours[airport.weather!.forecast!.decodedHours.length - 1].dateISO);
+        if (lastHour > end) {
+            end = lastHour;
         }
     }
 
@@ -88,10 +90,10 @@ export const printToday = async (utcOffset) => {
     headerLines.forEach(x => addLine(x));
     addLine(separatorLine);
 
-    const printAirport = (airport) => {
+    const printAirport = (airport: IAirport) => {
         let line = `| ${airport.id}${airport.id.length === 3 ? ' ': ''} |`;
         for (const hour of hours) {
-            const f = airport.forecast && airport.forecast.find(x => x.hour.getTime() === hour.getTime());
+            const f = airport.weather?.forecast?.decodedHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
             if (f) {
                 line += `${charForCode(f.minimums.wind[1])}${charForCode(f.minimums.gustFactor[1])}${charForCode(f.minimums.crosswind[1])}${charForCode(f.minimums.visibility[1])}${charForCode(f.minimums.weather[1])}${charForCode(f.minimums.ceiling[1])}|`;
             } else {
@@ -109,7 +111,7 @@ export const printToday = async (utcOffset) => {
                 summary = airports
                 .filter(x => x.zone === zone)
                 .reduce((prev, airport) => {
-                    const f = airport.forecast && airport.forecast.find(x => x.hour.getTime() === hour.getTime());
+                    const f = airport.weather?.forecast?.decodedHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
                     if (f && f.minimums.overall < prev) {
                         return f.minimums.overall;
                     }
@@ -137,8 +139,7 @@ export const printToday = async (utcOffset) => {
     addLine('');
     for (const airport of airports) {
         addLine(`${airport.name} (${airport.city}, ${airport.zone} Zone)`);
-        addLine(airport.forecastRaw);
-        addLine();
+        addLine(airport.weather?.forecast?.taf);
     }
 
     return output;
