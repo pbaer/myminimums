@@ -1,11 +1,14 @@
+const https = require('https');
 const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { getCachedData, putCachedData } from './cache';
+
+const noSSLAgent = new https.Agent({ rejectUnauthorized: false });
 
 export const wxDisc = async () => {
     let wxdisc = getCachedData('wxdisc');
     if (!wxdisc) {
         const fetch = (await loadNodeFetch()).default;
-        const response = await fetch('https://a.atmos.washington.edu/data/disc_report.html');
+        const response = await fetch('https://a.atmos.washington.edu/data/disc_report.html', { agent: noSSLAgent }); // Something is wrong with a.atmos.washington.edu's SSL certificate
         const text = await response.text();
         const start = 'Area Forecast Discussion\nNational Weather Service Seattle WA';
         const startIndex = text.indexOf(start);
@@ -34,7 +37,7 @@ export const wxImg = async (imgType: string) => {
     let wximg = getCachedData(cacheKey);
     if (!wximg) {
         const fetch = (await loadNodeFetch()).default;
-        const response = await fetch(`https://a.atmos.washington.edu/~ovens/wxloop.cgi?${imgType}+1`);
+        const response = await fetch(`https://a.atmos.washington.edu/~ovens/wxloop.cgi?${imgType}+1`, { agent: noSSLAgent }); // Something is wrong with a.atmos.washington.edu's SSL certificate
         const text = await response.text();
         let prefix;
         if (imgType === 'atx_ncr') {
