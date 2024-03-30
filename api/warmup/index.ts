@@ -5,7 +5,6 @@ const warmupHttpTrigger: AzureFunction = async function (context: Context, req: 
     context.res = {
         body: "Warmup completed"
     };
-
 };
 
 export default warmupHttpTrigger;

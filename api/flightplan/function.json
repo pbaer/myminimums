@@ -6,8 +6,11 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get"
-      ]
+        "get",
+        "post",
+        "put"
+      ],
+      "route": "flightplan/{id?}"
     },
     {
       "type": "http",
@@ -15,5 +18,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/weather/index.js"
+  "scriptFile": "../dist/flightplan/index.js"
 }
