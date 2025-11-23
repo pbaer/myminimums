@@ -1,16 +1,16 @@
 # MyMinimums
 
-To set up:
+## Setup
 
 * `npm install -g azurite`
 * Make a temp folder
 * In the web folder: `npm install`
 * In the api folder: `npm install`
 
-To run locally:
+## Run Locally
 
 * In the temp folder: `azurite --location .\azurite --debug azurite-debug.log`
 * In the api folder: `npm start` and `npm run watch` in separate terminals
 * In the web folder: `npm start`
 
-Use Azure Storage Explorer to inspect local blob storage
+Use Azure Storage Explorer to inspect local blob storage.
