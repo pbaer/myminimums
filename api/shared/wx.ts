@@ -37,7 +37,7 @@ export const wxImg = async (imgType: string) => {
     let wximg = getCachedData(cacheKey);
     if (!wximg) {
         const fetch = (await loadNodeFetch()).default;
-        const response = await fetch(`https://a.atmos.washington.edu/~ovens/wxloop.cgi?${imgType}+1`, { agent: noSSLAgent }); // Something is wrong with a.atmos.washington.edu's SSL certificate
+        const response = await fetch(`https://a.atmos.washington.edu/~ovens/wxloop.old.cgi?${imgType}+1`, { agent: noSSLAgent }); // Something is wrong with a.atmos.washington.edu's SSL certificate
         const text = await response.text();
         let prefix;
         if (imgType === 'atx_ncr') {
