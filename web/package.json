@@ -1,6 +1,7 @@
 {
   "name": "myminimums-web",
   "version": "1.0.0",
+  "type": "module",
   "author": "Peter Baer",
   "license": "MIT",
   "private": true,
