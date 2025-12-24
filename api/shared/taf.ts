@@ -69,7 +69,7 @@ export const addWeather = async (airport: IAirport) => {
 
             current = {
                 metar,
-                decoded: metarTafParser.parseMetar(metar)
+                decodedMetar: metarTafParser.parseMetar(metar)
             };
 
             putCachedData(metarCacheKey, current);
@@ -94,7 +94,7 @@ export const addWeather = async (airport: IAirport) => {
             const issued = new Date(issuedPrecise.getFullYear(), issuedPrecise.getMonth(), issuedPrecise.getDate(), issuedPrecise.getHours());
 
             const decodedTaf = metarTafParser.parseTAFAsForecast(taf, { issued });
-            const decodedHours = eachHourOfInterval({
+            const decodedTafHours = eachHourOfInterval({
                 start: decodedTaf.start,
                 end: new Date(decodedTaf.end.getTime() - oneHourInMs),
             }).map((date) => ({
@@ -102,14 +102,14 @@ export const addWeather = async (airport: IAirport) => {
                 ...metarTafParser.getCompositeForecastForDate(date, decodedTaf)
             }));
 
-            for (const hour of decodedHours) {
+            for (const hour of decodedTafHours) {
                 processHour(hour);
                 applyMinimums(hour, airport);
             }
 
             forecast = {
                 taf,
-                decodedHours
+                decodedTafHours
             };
 
             putCachedData(tafCacheKey, forecast);

@@ -1,11 +1,11 @@
 export interface ICurrentWeather {
     metar: string;
-    decoded: any;
+    decodedMetar: any;
 };
 
 export interface IForecastWeather {
     taf: string;
-    decodedHours: any[];
+    decodedTafHours: any[];
 };
 
 export interface IWeather {

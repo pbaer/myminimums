@@ -46,12 +46,12 @@ export const printToday = async (utcOffset) => {
     let start = new Date(Date.now() + oneYearInMs);
     let end = new Date(Date.now() - oneYearInMs);
 
-    for (const airport of airports.filter(x => x.hasTaf && x.weather?.forecast?.decodedHours?.length! > 0)) {
-        const firstHour = new Date(airport.weather!.forecast!.decodedHours[0].dateISO);
+    for (const airport of airports.filter(x => x.hasTaf && x.weather?.forecast?.decodedTafHours?.length! > 0)) {
+        const firstHour = new Date(airport.weather!.forecast!.decodedTafHours[0].dateISO);
         if (firstHour < start) {
             start = firstHour;
         }
-        const lastHour = new Date(airport.weather!.forecast!.decodedHours[airport.weather!.forecast!.decodedHours.length - 1].dateISO);
+        const lastHour = new Date(airport.weather!.forecast!.decodedTafHours[airport.weather!.forecast!.decodedTafHours.length - 1].dateISO);
         if (lastHour > end) {
             end = lastHour;
         }
@@ -93,7 +93,7 @@ export const printToday = async (utcOffset) => {
     const printAirport = (airport: IAirport) => {
         let line = `| ${airport.id}${airport.id.length === 3 ? ' ': ''} |`;
         for (const hour of hours) {
-            const f = airport.weather?.forecast?.decodedHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
+            const f = airport.weather?.forecast?.decodedTafHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
             if (f) {
                 line += `${charForCode(f.minimums.wind[1])}${charForCode(f.minimums.gustFactor[1])}${charForCode(f.minimums.crosswind[1])}${charForCode(f.minimums.visibility[1])}${charForCode(f.minimums.weather[1])}${charForCode(f.minimums.ceiling[1])}|`;
             } else {
@@ -111,7 +111,7 @@ export const printToday = async (utcOffset) => {
                 summary = airports
                 .filter(x => x.zone === zone)
                 .reduce((prev, airport) => {
-                    const f = airport.weather?.forecast?.decodedHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
+                    const f = airport.weather?.forecast?.decodedTafHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
                     if (f && f.minimums.overall < prev) {
                         return f.minimums.overall;
                     }
