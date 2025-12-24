@@ -60,7 +60,7 @@ export const addWeather = async (airport: IAirport) => {
         const metarCacheKey = `wxmetar-${airport.id}`;
         current = getCachedData(metarCacheKey);
         if (!current) {
-            const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport.idForMetar ?? airport.id}`);
+            const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport.icao ?? airport.id}`);
             const metar = await response.text();
             if (!metar) {
                 throw new Error(`No METAR for ${airport.id}`);
@@ -81,7 +81,7 @@ export const addWeather = async (airport: IAirport) => {
         const tafCacheKey = `wxtaf-${airport.id}`;
         forecast = getCachedData(tafCacheKey);
         if (!forecast) {
-            const response = await fetch(`https://aviationweather.gov/api/data/taf?ids=${airport.idForTaf ?? airport.id}`);
+            const response = await fetch(`https://aviationweather.gov/api/data/taf?ids=${airport.icao ?? airport.id}`);
             const taf = await response.text();
             if (!taf) {
                 throw new Error(`No TAF for ${airport.id}`);

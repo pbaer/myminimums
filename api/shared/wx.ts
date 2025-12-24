@@ -1,6 +1,7 @@
 const https = require('https');
 const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { getCachedData, putCachedData } from './cache';
+import { airports } from './airports';
 
 const noSSLAgent = new https.Agent({ rejectUnauthorized: false });
 
@@ -58,30 +59,15 @@ export const wxImg = async (imgType: string) => {
 };
 
 export const wxCam = async (airport: string) => {
-    const camUrls = {
-        '74S': 'https://images.wsdot.wa.gov/airports/anarunwayn.jpg',
-        'K0S9': 'https://images.wsdot.wa.gov/airports/PortTownsendW.jpg',
-        'KAWO': 'https://images.wsdot.wa.gov/airports/ArlRW11.jpg',
-        'KBFI': 'https://kbfi.wasar.org/south.jpg',
-        'KBLI': 'https://images.wsdot.wa.gov/airports/bham.jpg',
-        'KBVS': 'http://images.wsdot.wa.gov/airports/SkagitRW29.jpg',
-        'KFHR': 'https://images.wsdot.wa.gov/airports/friday2.jpg',
-        'KNUW': 'https://images.wsdot.wa.gov/nw/020vc03472.jpg',
-        'KOLM': 'https://images.wsdot.wa.gov/airports/OlySouthR.jpg',
-        'KORS': 'https://images.wsdot.wa.gov/airports/OrcasSW.jpg',
-        'KPAE': 'https://www.snoco.org/axis-cgi/jpg/image.cgi?resolution=800x600',
-        'KPWT': 'http://images.wsdot.wa.gov/airports/bremertonRWN.jpg',
-        'S43': 'http://www.harveyfield.com/WebcamImageHandler.ashx',
-        'S50': 'https://images.wsdot.wa.gov/airports/auburn2.jpg',
-    };
-    if (!camUrls[airport]) {
+    const camUrl = airports.find(x => x.id === airport)?.camUrl;
+    if (!camUrl) {
         throw new Error(`No webcam URL for ${airport}`);
     }
     const cacheKey = `wxcam-${airport}`;
     let wxcam = getCachedData(cacheKey);
     if (!wxcam) {
         const fetch = (await loadNodeFetch()).default;
-        const response = await fetch(camUrls[airport]);
+        const response = await fetch(camUrl);
         const arrayBuffer = await response.arrayBuffer();
         const imageBuffer = Buffer.from(arrayBuffer);
         wxcam = {
@@ -97,10 +83,11 @@ export const wxMetar = async (airport: string) => {
     let wxMetar = getCachedData(cacheKey);
     if (!wxMetar) {
         const fetch = (await loadNodeFetch()).default;
-        const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport}`);
+        const icao = airports.find(x => x.id === airport)?.icao ?? airport;
+        const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}`);
         const body = await response.text();
         wxMetar = {
-            text: body
+            text: body ?? 'No METAR'
         };
         putCachedData(cacheKey, wxMetar);
     }

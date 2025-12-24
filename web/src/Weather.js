@@ -48,19 +48,20 @@ function Weather() {
   const airports = {
     pugetSound: [
       { id: 'S43', name: 'Harvey Field' },
-      { id: 'KPAE', name: 'Paine Field' },
-      { id: 'KAWO', name: 'Arlington Municipal' },
-      { id: 'K0S9', name: 'Jefferson County International' },
-      { id: 'KBFI', name: 'Boeing Field' },
-      { id: 'KPWT', name: 'Bremerton National' },
-      { id: 'KOLM', name: 'Olympia Regional' }
+      { id: 'PAE', name: 'Paine Field' },
+      { id: 'AWO', name: 'Arlington Municipal' },
+      { id: '0S9', name: 'Jefferson County International' },
+      { id: 'BFI', name: 'Boeing Field' },
+      { id: 'PWT', name: 'Bremerton National' },
+      { id: 'S50', name: 'Auburn Municipal' },
+      { id: 'OLM', name: 'Olympia Regional' }
     ],
     islands: [
-      { id: 'KBVS', name: 'Skagit Regional' },
-      { id: 'KBLI', name: 'Bellingham International' },
-      { id: 'KNUW', name: 'Whidbey Island Naval Air Station' },
-      { id: 'KORS', name: 'Orcas Island' },
-      { id: 'KFHR', name: 'Friday Harbor' },
+      { id: 'BVS', name: 'Skagit Regional' },
+      { id: 'BLI', name: 'Bellingham International' },
+      { id: 'NUW', name: 'Whidbey Island Naval Air Station' },
+      { id: 'ORS', name: 'Orcas Island' },
+      { id: 'FHR', name: 'Friday Harbor' },
     ]
   };
 

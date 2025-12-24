@@ -14,3 +14,5 @@
 * In the web folder: `npm start`
 
 Use Azure Storage Explorer to inspect local blob storage.
+
+For debugging, ensure Azure Functions Core Tools are installed: https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local
