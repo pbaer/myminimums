@@ -17,7 +17,7 @@ const personalMinimums = {
 
 const getWindMinimumsCode = (wind, airport) => {
     const windKts = wind.gust ? wind.gust : wind.speed;
-    if (!airport.runwaysTrue) {
+    if (!airport.runways || airport.runways.length === 0) {
         return [windKts, Code.None];
     }
     if (windKts < personalMinimums.wind[0]) {
@@ -31,7 +31,7 @@ const getWindMinimumsCode = (wind, airport) => {
 
 const getGustFactorMinimumsCode = (wind, airport) => {
     const gustFactor = wind.gust ? (wind.gust - wind.speed) : 0;
-    if (!airport.runwaysTrue) {
+    if (!airport.runways || airport.runways.length === 0) {
         return [gustFactor, Code.None];
     }
     if (gustFactor < personalMinimums.gustFactor[0]) {
@@ -44,18 +44,22 @@ const getGustFactorMinimumsCode = (wind, airport) => {
 }
 
 const getCrosswindMinimumsCode = (wind, airport) => {
-    if (!airport.runwaysTrue) {
+    if (!airport.runways || airport.runways.length === 0) {
         return [0, Code.None];
     }
     const windKts = wind.gust ? wind.gust : wind.speed;
-    const calculateCrosswind = (windKts, windDegrees, runwaysTrue) => {
+    const calculateCrosswind = (windKts, windDegrees, headingTrue) => {
         if (windDegrees === undefined) {
             return windKts;
         }
-        return Math.round(Math.sin(Math.PI * Math.abs(windDegrees - runwaysTrue)/180) * windKts);
+        return Math.round(Math.sin(Math.PI * Math.abs(windDegrees - headingTrue)/180) * windKts);
     };    
-    let crosswindMinimums = airport.runwaysTrue.map(runwaysTrue => {
-        const crosswind = calculateCrosswind(windKts, wind.degrees, runwaysTrue);
+    // Get all runway end true headings
+    const runwayHeadings = airport.runways.flatMap(runway => 
+        runway.ends.map(end => end.headingTrue)
+    );
+    let crosswindMinimums = runwayHeadings.map(headingTrue => {
+        const crosswind = calculateCrosswind(windKts, wind.degrees, headingTrue);
         if (crosswind < personalMinimums.crosswind[0]) {
             return [crosswind, Code.Green];
         }

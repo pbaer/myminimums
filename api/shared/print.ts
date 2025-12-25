@@ -1,5 +1,5 @@
 import { getSunrise, getSunset } from 'sunrise-sunset-js';
-import { IAirport, airports } from './airports';
+import { IAirport, getAirports } from './airports';
 import { Code } from './minimums';
 import { addWeather } from './taf';
 import { oneHourInMs, oneDayInMs, oneYearInMs, toPaddedString, eachHourOfInterval, localDate } from './util';
@@ -33,7 +33,7 @@ const isDaylightHour = (hour) => {
 
 export const printToday = async (utcOffset) => {
     const promises: Promise<void>[] = [];
-    for (const airport of airports.filter(x => x.hasTaf)) {
+    for (const airport of getAirports().filter(x => x.hasTaf)) {
         promises.push(addWeather(airport));
     }
     await Promise.all(promises);
@@ -46,7 +46,7 @@ export const printToday = async (utcOffset) => {
     let start = new Date(Date.now() + oneYearInMs);
     let end = new Date(Date.now() - oneYearInMs);
 
-    for (const airport of airports.filter(x => x.hasTaf && x.weather?.forecast?.decodedTafHours?.length! > 0)) {
+    for (const airport of getAirports().filter(x => x.hasTaf && x.weather?.forecast?.decodedTafHours?.length! > 0)) {
         const firstHour = new Date(airport.weather!.forecast!.decodedTafHours[0].dateISO);
         if (firstHour < start) {
             start = firstHour;
@@ -64,7 +64,7 @@ export const printToday = async (utcOffset) => {
     end = new Date(Math.min(end.getTime(), start.getTime() + 26 * oneHourInMs));
 
     const zones = new Set<string>();
-    airports.forEach(x => zones.add(x.zone));
+    getAirports().forEach(x => zones.add(x.zone));
 
     const hours = eachHourOfInterval({
         start: start,
@@ -108,7 +108,7 @@ export const printToday = async (utcOffset) => {
         for (const hour of hours) {
             let summary;
             if (isDaylightHour(hour)) {
-                summary = airports
+                summary = getAirports()
                 .filter(x => x.zone === zone)
                 .reduce((prev, airport) => {
                     const f = airport.weather?.forecast?.decodedTafHours.find(x => new Date(x.dateISO).getTime() === hour.getTime());
@@ -130,14 +130,14 @@ export const printToday = async (utcOffset) => {
         addLine(separatorLine);
         printZoneSummary(zone);
         addLine(separatorLine);
-        for (const airport of airports.filter(x => x.zone === zone)) {
+        for (const airport of getAirports().filter(x => x.zone === zone)) {
             printAirport(airport);
         }    
         addLine(separatorLine);
     }
 
     addLine('');
-    for (const airport of airports) {
+    for (const airport of getAirports()) {
         addLine(`${airport.name} (${airport.city}, ${airport.zone} Zone)`);
         addLine(airport.weather?.forecast?.taf);
     }

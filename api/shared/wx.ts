@@ -1,7 +1,8 @@
 const https = require('https');
 const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { getCachedData, putCachedData } from './cache';
-import { airports } from './airports';
+import { getAirports } from './airports';
+import { addWeather } from './taf';
 
 const noSSLAgent = new https.Agent({ rejectUnauthorized: false });
 
@@ -59,7 +60,7 @@ export const wxImg = async (imgType: string) => {
 };
 
 export const wxCam = async (airport: string) => {
-    const camUrl = airports.find(x => x.id === airport)?.camUrl;
+    const camUrl = getAirports().find(x => x.id === airport)?.camUrl;
     if (!camUrl) {
         throw new Error(`No webcam URL for ${airport}`);
     }
@@ -78,18 +79,8 @@ export const wxCam = async (airport: string) => {
     return Buffer.from(wxcam.image, 'base64');
 };
 
-export const wxMetar = async (airport: string) => {
-    const cacheKey = `wxmetar-${airport}`;
-    let wxMetar = getCachedData(cacheKey);
-    if (!wxMetar) {
-        const fetch = (await loadNodeFetch()).default;
-        const icao = airports.find(x => x.id === airport)?.icao ?? airport;
-        const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}`);
-        const body = await response.text();
-        wxMetar = {
-            text: body ?? 'No METAR'
-        };
-        putCachedData(cacheKey, wxMetar);
-    }
-    return wxMetar.text;
+export const wxMetar = async (airportId: string) => {
+    const airport = getAirports().find(x => x.id === airportId)!;
+    await addWeather(airport);
+    return airport.weather?.current?.metar || '';
 }

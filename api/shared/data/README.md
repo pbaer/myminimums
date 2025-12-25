@@ -1,0 +1,2 @@
+Runway data downloaded from https://geodata.bts.gov/datasets/usdot::runways/explore with STATE_CODE = WA|OR and FACILITY_USE_CODE = PU
+Airport data downloaded from https://geodata.bts.gov/datasets/usdot::aviation-facilities/explore with STATE_CODE = WA|OR and FACILITY_USE_CODE = PU

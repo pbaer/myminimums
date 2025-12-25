@@ -55,6 +55,11 @@ export const addWeather = async (airport: IAirport) => {
     const fetch = (await loadNodeFetch()).default;
     const metarTafParser = await loadMetarTafParser();
 
+    // Don't update if we have data and it is fresh within the last 15 minutes
+    if (airport.weather?.lastUpdate && Date.now() - airport.weather.lastUpdate < oneHourInMs/4) {
+        return;
+    }
+
     let current: ICurrentWeather | undefined = undefined;
     if (airport.hasMetar) {
         const metarCacheKey = `wxmetar-${airport.id}`;
@@ -117,6 +122,7 @@ export const addWeather = async (airport: IAirport) => {
     }
 
     airport.weather = {
+        lastUpdate: Date.now(),
         current,
         forecast,
     };

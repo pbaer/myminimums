@@ -5,7 +5,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-data",
+    "copy-data": "node -e \"require('fs').cpSync('shared/data', 'dist/shared/data', {recursive: true})\"",
     "watch": "tsc -w",
     "prestart": "npm run build",
     "start": "nodemon --exec \"func start\" --ignore cache/",
@@ -16,6 +17,7 @@
     "ajv": "^8.12.0",
     "ajv-formats": "^3.0.1",
     "dotenv": "^17.2.3",
+    "geomagnetism": "^0.2.0",
     "metar-taf-parser": "^9.1.2",
     "node-fetch": "^3.3.2",
     "sunrise-sunset-js": "^2.2.1",
