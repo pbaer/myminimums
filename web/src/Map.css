@@ -1,0 +1,355 @@
+.map-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.map-wrapper {
+    flex: 1;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.debug-toggle {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    font-size: 0.9rem;
+}
+
+.debug-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.debug-toggle input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.leaflet-container {
+    width: 100%;
+    height: 100%;
+}
+
+.side-pane {
+    height: 100vh;
+    background-color: #fff;
+    border-left: 2px solid #ccc;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.resize-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    cursor: ew-resize;
+    background-color: transparent;
+    z-index: 10;
+    margin-left: -4px;
+}
+
+.resize-handle:hover {
+    background-color: rgba(25, 118, 210, 0.5);
+}
+
+.resize-handle:active {
+    background-color: rgba(25, 118, 210, 0.7);
+}
+
+.side-pane-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #999;
+    padding: 20px;
+    text-align: center;
+}
+
+.side-pane-empty p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.side-pane-empty .hint {
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+.airport-side-panel {
+    padding: 20px;
+}
+
+.pinned-indicator {
+    background-color: #1976d2;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.camera-section {
+    margin: 15px 0;
+}
+
+.camera-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-top: 8px;
+}
+
+.map-loading,
+.map-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.map-error {
+    color: #d32f2f;
+}
+
+/* Custom scrollbar for side pane */
+.side-pane::-webkit-scrollbar {
+    width: 10px;
+}
+
+.side-pane::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.side-pane::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.side-pane::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.airport-popup {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+}
+
+.airport-info h3 {
+    margin: 0 0 10px 0;
+    color: #1976d2;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #1976d2;
+    padding-bottom: 5px;
+}
+
+.airport-info h4 {
+    margin: 15px 0 8px 0;
+    color: #424242;
+    font-size: 1rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 3px;
+}
+
+.airport-details,
+.runways-info,
+.weather-info {
+    margin: 10px 0;
+}
+
+.detail-item,
+.weather-item {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.detail-item strong,
+.weather-item strong {
+    color: #666;
+    margin-right: 5px;
+}
+
+.runway-item {
+    margin: 8px 0;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.runway-ends {
+    margin-top: 5px;
+    padding-left: 10px;
+}
+
+.runway-end {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 3px 0;
+};
+    overflow-x: auto
+.metar-section,
+.taf-section {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.metar-raw,
+.taf-raw {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    background-color: #fff;
+    padding: 8px;
+    border-left: 3px solid #1976d2;
+    margin: 8px 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.metar-decoded {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.weather-item ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.weather-item li {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.weather-update {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.3);
+}
+
+.leaflet-popup-content {
+    margin: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Leaflet tooltip customization */
+.leaflet-tooltip.airport-tooltip {
+    min-width: 700px;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+    background-color: white;
+    border: 1px solid #999;
+    padding: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+    pointer-events: auto;
+}
+
+.leaflet-tooltip.airport-tooltip .airport-info {
+    width: 100%;
+}
+
+.leaflet-tooltip.airport-tooltip .metar-raw,
+.leaflet-tooltip.airport-tooltip .taf-raw {
+    white-space: pre;
+    overflow-x: auto;
+    min-width: 650px;
+}
+
+/* Custom scrollbar for tooltip */
+.leaflet-tooltip.airport-tooltip::-webkit-scrollbar {
+    width: 8px;
+}
+
+.leaflet-tooltip.airport-tooltip::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.leaflet-tooltip.airport-tooltip::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.leaflet-tooltip.airport-tooltip::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Scrollbar for TAF/METAR text */
+.metar-raw::-webkit-scrollbar,
+.taf-raw::-webkit-scrollbar {
+    height: 6px;
+}
+
+.metar-raw::-webkit-scrollbar-track,
+.taf-raw::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.metar-raw::-webkit-scrollbar-thumb,
+.taf-raw::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.metar-raw::-webkit-scrollbar-thumb:hover,
+.taf-raw::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Custom scrollbar for popup */
+.leaflet-popup-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.leaflet-popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.leaflet-popup-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.leaflet-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
