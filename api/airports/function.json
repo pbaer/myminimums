@@ -15,5 +15,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/airport/index.js"
+  "scriptFile": "../dist/airports/index.js"
 }
