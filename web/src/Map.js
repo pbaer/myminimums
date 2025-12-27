@@ -426,12 +426,6 @@ function Map() {
             .then(data => {
                 console.log('Airports loaded:', data.length);
                 setAirports(data);
-                // Set default airport to S43 (Harvey Field) and pin it
-                const defaultAirport = data.find(a => a.id === 'S43');
-                if (defaultAirport) {
-                    setSelectedAirport(defaultAirport);
-                    setIsPinned(true);
-                }
                 setLoading(false);
             })
             .catch(err => {
@@ -642,9 +636,26 @@ function Map() {
                                 '#800080': '#E6CCE6', // LIFR purple
                                 '#808080': '#E6E6E6'  // UNKNOWN gray
                             };
-                            const backgroundColor = isPinned && selectedAirport?.id === airport.id 
-                                ? '#FFE4B5' 
-                                : backgroundColors[category.color] || 'white';
+                            const backgroundColor = backgroundColors[category.color] || 'white';
+                            const isPinnedAirport = isPinned && selectedAirport?.id === airport.id;
+                            const pinIcon = isPinnedAirport 
+                                ? `<div style="
+                                    position: absolute;
+                                    top: -7px;
+                                    left: -7px;
+                                    width: 14px;
+                                    height: 14px;
+                                    background: #555;
+                                    border: 1.5px solid #DDD;
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-size: 8px;
+                                    color: #DDD;
+                                    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+                                ">◆</div>`
+                                : '';
                             return (
                         <Marker
                             position={(() => {
@@ -655,6 +666,7 @@ function Map() {
                             icon={L.divIcon({
                                 className: 'airport-label',
                                 html: `<div style="
+                                    position: relative;
                                     font-size: 13px; 
                                     font-weight: ${selectedAirport?.id === airport.id ? 'bold' : 'normal'}; 
                                     color: #000; 
@@ -668,7 +680,7 @@ function Map() {
                                     line-height: 1;
                                     box-sizing: border-box;
                                     transform: translate(-50%, -50%);
-                                ">${airport.id}</div>`,
+                                ">${pinIcon}${airport.id}</div>`,
                                 iconSize: [0, 0],
                                 iconAnchor: [0, 0],
                                 className: ''
