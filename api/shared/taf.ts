@@ -65,22 +65,28 @@ export const addWeather = async (airport: IAirport) => {
         const metarCacheKey = `wxmetar-${airport.id}`;
         current = getCachedData(metarCacheKey);
         if (!current) {
-            const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport.icao ?? airport.id}`);
-            const metar = await response.text();
-            if (!metar) {
+            try {
+                const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport.icao ?? airport.id}`);
+                const metar = await response.text();
+                if (!metar) {
+                    throw new Error('Empty response');
+                } else if (metar.toLowerCase().includes('error')) {
+                    throw new Error(metar);
+                } else {
+                    metar.replace(/CLR/g, 'SKC'); // Workaround for bug in metar-taf-parser that doesn't recognize CLR
+
+                    current = {
+                        metar,
+                        decodedMetar: metarTafParser.parseMetar(metar)
+                    };
+
+                    putCachedData(metarCacheKey, current);
+                }
+            } catch (err) {
                 current = {
-                    metar: 'NO METAR AVAILABLE',
+                    metar: `NO METAR AVAILABLE (${err})`,
                     decodedMetar: {}
                 };
-            } else {
-                metar.replace(/CLR/g, 'SKC'); // Workaround for bug in metar-taf-parser that doesn't recognize CLR
-
-                current = {
-                    metar,
-                    decodedMetar: metarTafParser.parseMetar(metar)
-                };
-
-                putCachedData(metarCacheKey, current);
             }
         }
     }
@@ -90,40 +96,46 @@ export const addWeather = async (airport: IAirport) => {
         const tafCacheKey = `wxtaf-${airport.id}`;
         forecast = getCachedData(tafCacheKey);
         if (!forecast) {
-            const response = await fetch(`https://aviationweather.gov/api/data/taf?ids=${airport.icao ?? airport.id}`);
-            const taf = await response.text();
-            if (!taf) {
+            try {
+                const response = await fetch(`https://aviationweather.gov/api/data/taf?ids=${airport.icao ?? airport.id}`);
+                const taf = await response.text();
+                if (!taf) {
+                    throw new Error('Empty response');
+                } else if (taf.toLowerCase().includes('error')) {
+                    throw new Error(taf);
+                } else {
+                    // For simplicity assume the TAF was issued 12h ago, doesn't need to be precise, just before the valid period
+                    const issuedPrecise = new Date(Date.now() - oneDayInMs/2);
+
+                    // For mysterious reasons the parser doesn't like the precise time, so round down to the hour
+                    const issued = new Date(issuedPrecise.getFullYear(), issuedPrecise.getMonth(), issuedPrecise.getDate(), issuedPrecise.getHours());
+
+                    const decodedTaf = metarTafParser.parseTAFAsForecast(taf, { issued });
+                    const decodedTafHours = eachHourOfInterval({
+                        start: decodedTaf.start,
+                        end: new Date(decodedTaf.end.getTime() - oneHourInMs),
+                    }).map((date) => ({
+                        dateISO: date.toISOString(),
+                        ...metarTafParser.getCompositeForecastForDate(date, decodedTaf)
+                    }));
+
+                    for (const hour of decodedTafHours) {
+                        processHour(hour);
+                        applyMinimums(hour, airport);
+                    }
+
+                    forecast = {
+                        taf,
+                        decodedTafHours
+                    };
+
+                    putCachedData(tafCacheKey, forecast);
+                }
+            } catch (err) {
                 forecast = {
-                    taf: 'NO TAF AVAILABLE',
+                    taf: `NO TAF AVAILABLE (${err})`,
                     decodedTafHours: []
                 };
-            } else {
-                // For simplicity assume the TAF was issued 12h ago, doesn't need to be precise, just before the valid period
-                const issuedPrecise = new Date(Date.now() - oneDayInMs/2);
-
-                // For mysterious reasons the parser doesn't like the precise time, so round down to the hour
-                const issued = new Date(issuedPrecise.getFullYear(), issuedPrecise.getMonth(), issuedPrecise.getDate(), issuedPrecise.getHours());
-
-                const decodedTaf = metarTafParser.parseTAFAsForecast(taf, { issued });
-                const decodedTafHours = eachHourOfInterval({
-                    start: decodedTaf.start,
-                    end: new Date(decodedTaf.end.getTime() - oneHourInMs),
-                }).map((date) => ({
-                    dateISO: date.toISOString(),
-                    ...metarTafParser.getCompositeForecastForDate(date, decodedTaf)
-                }));
-
-                for (const hour of decodedTafHours) {
-                    processHour(hour);
-                    applyMinimums(hour, airport);
-                }
-
-                forecast = {
-                    taf,
-                    decodedTafHours
-                };
-
-                putCachedData(tafCacheKey, forecast);
             }
         }
     }
