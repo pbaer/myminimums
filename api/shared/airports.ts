@@ -149,12 +149,14 @@ export const getAirports = (): IAirport[] => {
         { id: 'OLM', zone: 'Puget Sound', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/airports/OlySouthR.jpg' },
         { id: 'SHN', zone: 'Puget Sound', hasMetar: true, camUrl: 'https://www.youtube.com/embed/lxWi_B3Rnss?si=obTvGTBXu6sB5-H7' },
         { id: 'TCM', zone: 'Puget Sound', hasMetar: true, hasTaf: true, icaoOverride: 'KTCM', latOverride: 47.079167, lonOverride: -122.580833, elevationOverride: 301 },
-        
+        { id: '21W', zone: 'Puget Sound' },
+
         // Islands
         { id: 'CLM', zone: 'Islands', hasMetar: true, hasTaf: true, camUrl: 'https://www.youtube.com/embed/pOgt56-SOJQ?si=n_kBk3pqYcAcbSnB' },
         { id: 'W28', zone: 'Islands', camUrl: 'https://w28webcam.blob.core.windows.net/cameras/south-snapshot.png' },
         { id: 'BLI', zone: 'Islands', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/airports/bham.jpg' },
         { id: '3W5', zone: 'Islands', camUrl: 'https://images.wsdot.wa.gov/airports/concrete3.jpg' },
+        { id: '1S2', zone: 'Islands' },
         { id: 'BVS', zone: 'Islands', hasMetar: true, camUrl: 'http://images.wsdot.wa.gov/airports/SkagitRW29.jpg' },
         { id: '74S', zone: 'Islands', camUrl: 'https://images.wsdot.wa.gov/airports/anarunwayn.jpg' },
         { id: 'ORS', zone: 'Islands', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/OrcasSW.jpg' },
