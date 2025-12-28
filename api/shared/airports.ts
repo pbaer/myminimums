@@ -133,30 +133,73 @@ export const getAirports = (): IAirport[] => {
 
     const airportsToLoad: IAirportMetadata[] = [
         { id: 'S43', zone: 'Home', local: true, camUrl: 'http://www.harveyfield.com/WebcamImageHandler.ashx' },
+        
+        // Puget Sound
         { id: 'PAE', zone: 'Puget Sound', hasMetar: true, hasTaf: true, camUrl: 'https://www.snoco.org/axis-cgi/jpg/image.cgi?resolution=800x600' },
         { id: 'AWO', zone: 'Puget Sound', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/ArlRW11.jpg' },
         { id: '0S9', zone: 'Puget Sound', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/PortTownsendW.jpg', icaoOverride: 'K0S9' },
         { id: 'PWT', zone: 'Puget Sound', hasMetar: true, hasTaf: true, camUrl: 'http://images.wsdot.wa.gov/airports/bremertonRWN.jpg' },
         { id: 'BFI', zone: 'Puget Sound', hasMetar: true, hasTaf: true, camUrl: 'https://kbfi.wasar.org/south.jpg' },
+        { id: 'S88', zone: 'Puget Sound', camUrl: 'https://images.wsdot.wa.gov/airports/skywest.jpg' },
         { id: 'SEA', zone: 'Puget Sound', hasMetar: true, hasTaf: true, camUrl: 'https://cdn.tegna-media.com/king/weather/seatac.jpg' },
+        { id: 'RNT', zone: 'Puget Sound', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/renton.jpg' },
+        { id: 'TIW', zone: 'Puget Sound', hasMetar: true },
+        { id: 'PLU', zone: 'Puget Sound', hasMetar: true },
         { id: 'S50', zone: 'Puget Sound', camUrl: 'https://images.wsdot.wa.gov/airports/auburn2.jpg' },
         { id: 'OLM', zone: 'Puget Sound', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/airports/OlySouthR.jpg' },
-        { id: 'CLM', zone: 'Islands', hasMetar: true, hasTaf: true },
+        { id: 'SHN', zone: 'Puget Sound', hasMetar: true, camUrl: 'https://www.youtube.com/embed/lxWi_B3Rnss?si=obTvGTBXu6sB5-H7' },
+        { id: 'TCM', zone: 'Puget Sound', hasMetar: true, hasTaf: true, icaoOverride: 'KTCM', latOverride: 47.079167, lonOverride: -122.580833, elevationOverride: 301 },
+        
+        // Islands
+        { id: 'CLM', zone: 'Islands', hasMetar: true, hasTaf: true, camUrl: 'https://www.youtube.com/embed/pOgt56-SOJQ?si=n_kBk3pqYcAcbSnB' },
+        { id: 'W28', zone: 'Islands', camUrl: 'https://w28webcam.blob.core.windows.net/cameras/south-snapshot.png' },
         { id: 'BLI', zone: 'Islands', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/airports/bham.jpg' },
+        { id: '3W5', zone: 'Islands', camUrl: 'https://images.wsdot.wa.gov/airports/concrete3.jpg' },
         { id: 'BVS', zone: 'Islands', hasMetar: true, camUrl: 'http://images.wsdot.wa.gov/airports/SkagitRW29.jpg' },
         { id: '74S', zone: 'Islands', camUrl: 'https://images.wsdot.wa.gov/airports/anarunwayn.jpg' },
         { id: 'ORS', zone: 'Islands', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/OrcasSW.jpg' },
+        { id: 'S31', zone: 'Islands', camUrl: 'https://images.wsdot.wa.gov/airports/lopezn.jpg' },
+        { id: 'RHR', zone: 'Islands', camUrl: 'https://images.weatherstem.com/skycamera/sanjuan/rocheharbor/runway/snapshot.jpg', nameOverride: 'ROCHE HARBOR', cityOverride: 'SAN JUAN ISLAND', latOverride: 48.612333, lonOverride: -123.138500, elevationOverride: 100 },
         { id: 'FHR', zone: 'Islands', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/friday2.jpg' },
         { id: 'NUW', zone: 'Islands', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/nw/020vc03472.jpg', icaoOverride: 'KNUW', nameOverride: 'WHIDBEY ISLAND NAS', cityOverride: 'OAK HARBOR', latOverride: 48.3511, lonOverride: -122.6561, elevationOverride: 20 },
+        
+        // Coast
         { id: 'HQM', zone: 'Coast', hasMetar: true, hasTaf: true },
+        { id: 'UIL', zone: 'Coast' },
         { id: 'AST', zone: 'Coast', hasMetar: true, hasTaf: true },
-        { id: 'PDX', zone: 'Gorge', hasMetar: true, hasTaf: true },
-        { id: 'TTD', zone: 'Gorge', hasMetar: true, hasTaf: true },
+        
+        // Portland Area
+        { id: 'PDX', zone: 'Portland Area', hasMetar: true, hasTaf: true },
+        { id: 'TTD', zone: 'Portland Area', hasMetar: true, hasTaf: true },
+        { id: 'HIO', zone: 'Portland Area', hasMetar: true, hasTaf: true },
+        { id: 'UAO', zone: 'Portland Area', hasMetar: true, hasTaf: true },
+        { id: 'SPB', zone: 'Portland Area', hasMetar: true },
+        { id: 'SLE', zone: 'Portland Area', hasMetar: true, hasTaf: true },
+        { id: 'CLS', zone: 'Portland Area', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/chehalis9.jpg' },
+        { id: 'KLS', zone: 'Portland Area', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/kelsosw.jpg' },
+        { id: 'TDO', zone: 'Portland Area', camUrl: 'https://images.wsdot.wa.gov/airports/ToledoSouthEast.jpg' },
+        { id: '55S', zone: 'Portland Area', camUrl: 'https://images.wsdot.wa.gov/airports/packwood5.jpg' },
+        { id: 'W27', zone: 'Portland Area', camUrl: 'https://images.wsdot.wa.gov/airports/WoodlandS.jpg' },
+        { id: 'TMK', zone: 'Portland Area', hasMetar: true },
+        
+        // Gorge
         { id: 'DLS', zone: 'Gorge', hasMetar: true, hasTaf: true },
-        { id: 'EAT', zone: 'Eastern WA', hasMetar: true, hasTaf: true },
-        { id: 'YKM', zone: 'Eastern WA', hasMetar: true, hasTaf: true },
-        { id: 'SFF', zone: 'Eastern WA', hasMetar: true, hasTaf: true },
-        { id: 'PSC', zone: 'Eastern WA', hasMetar: true, hasTaf: true }
+        { id: 'PDT', zone: 'Gorge', hasMetar: true, hasTaf: true },
+        
+        // Eastern WA
+        { id: 'ESW', zone: 'Eastern WA', camUrl: 'https://images.wsdot.wa.gov/airports/EastonE.jpg' },
+        { id: 'S52', zone: 'Eastern WA', camUrl: 'http://images.wsdot.wa.gov/airports/MethowN.jpg' },
+        { id: 'EAT', zone: 'Eastern WA', hasMetar: true, hasTaf: true, camUrl: 'https://cam.pangbornairport.com/webcam/pawebcam.jpg' },
+        { id: 'YKM', zone: 'Eastern WA', hasMetar: true, hasTaf: true, camUrl: 'https://flyykm.com/apps/webcam/' },
+        { id: 'ELN', zone: 'Eastern WA', hasMetar: true },
+        { id: 'SFF', zone: 'Eastern WA', hasMetar: true, hasTaf: true, camUrl: 'http://www.northwestvoiceover.com/felts/image.jpg' },
+        { id: 'PSC', zone: 'Eastern WA', hasMetar: true, hasTaf: true },
+        { id: 'MWH', zone: 'Eastern WA', hasMetar: true, hasTaf: true, camUrl:'https://images.wsdot.wa.gov/airports/mosesnorth.jpg' },
+        { id: 'EPH', zone: 'Eastern WA', hasMetar: true },
+        { id: 'PUW', zone: 'Eastern WA', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/airports/pullmanne.jpg' },
+        { id: 'ALW', zone: 'Eastern WA', hasMetar: true, hasTaf: true, camUrl: 'https://images.wsdot.wa.gov/airports/walla4.jpg' },
+        { id: 'RLD', zone: 'Eastern WA', hasMetar: true, camUrl: 'https://images.wsdot.wa.gov/airports/rich1.jpg' },
+        { id: 'OMK', zone: 'Eastern WA', hasMetar: true }
     ];
 
     // Read airports CSV
