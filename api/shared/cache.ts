@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { oneHourInMs } from './util';
 
 const isCacheCurrent = (data) => {
-    if (!data || Date.now() - data.downloaded > oneHourInMs/2) {
+    if (!data || !(data.timestamp > 0) || Date.now() - data.timestamp > oneHourInMs/2) {
         return false;
     }
     return true;
@@ -17,15 +17,18 @@ export const getCachedData = (dataId) => {
             data = undefined;
         }
     }
-    return data;
+    return data?.value;
 }
 
 export const putCachedData = (dataId, data) => {
-    data.downloaded = Date.now();
+    const cacheEntry = {
+        value: data,
+        timestamp: Date.now()
+    };
     if (process.env.DEPLOYMENT_ENV === 'dev') {
         if (!existsSync('./cache')) {
             mkdirSync('./cache');
         }
-        writeFileSync(`./cache/${dataId}.json`, JSON.stringify(data, undefined, ' '));
+        writeFileSync(`./cache/${dataId}.json`, JSON.stringify(cacheEntry, undefined, ' '));
     }
 }
