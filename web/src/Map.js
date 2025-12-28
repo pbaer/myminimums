@@ -14,6 +14,26 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
+// Helper function to check if URL is a YouTube URL and extract video ID
+function getYouTubeVideoId(url) {
+    if (!url) return null;
+    
+    // Match various YouTube URL formats
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?\/\s]+)/,
+        /youtube\.com\/watch\?.*v=([^&?\/\s]+)/
+    ];
+    
+    for (const pattern of patterns) {
+        const match = url.match(pattern);
+        if (match && match[1]) {
+            return match[1];
+        }
+    }
+    
+    return null;
+}
+
 // Helper function to calculate airport bounding box with margin
 function calculateAirportBounds(airport, marginMiles = 2) {
     // Convert margin from miles to degrees (approximate)
@@ -53,6 +73,11 @@ function getFlightCategory(airport) {
     }
     
     const metar = airport.weather.current.decodedMetar;
+    
+    // Check if decodedMetar is an empty object
+    if (Object.keys(metar).length === 0) {
+        return { color: '#808080', name: 'UNKNOWN' }; // Gray for empty METAR
+    }
     
     // Get ceiling (lowest BKN or OVC layer)
     let ceilingFeet = null;
@@ -95,7 +120,7 @@ function getFlightCategory(airport) {
     }
     
     // VFR: otherwise (ceiling >= 3000 AND visibility >= 5, or no ceiling/unlimited visibility)
-    return { color: '#00FF00', name: 'VFR' }; // Green
+    return { color: '#00A500', name: 'VFR' }; // Green
 }
 function calculateRunwayPolygon(end1, end2, widthFeet) {
     // Convert width from feet to degrees
@@ -341,12 +366,35 @@ function AirportSidePanel({ airport, isPinned, sidePaneWidth }) {
             {airport.camUrl && (
                 <div className="camera-section">
                     <h4>Camera View</h4>
-                    <img 
-                        src={`/api/weather?source=wxcam&airport=${airport.id}`} 
-                        alt={`${airport.id} camera`}
-                        className="camera-image"
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                    />
+                    {(() => {
+                        const videoId = getYouTubeVideoId(airport.camUrl);
+                        if (videoId) {
+                            // Render YouTube embed with autoplay
+                            return (
+                                <iframe 
+                                    width="100%" 
+                                    height="315" 
+                                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`}
+                                    title="YouTube video player" 
+                                    frameBorder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    referrerPolicy="strict-origin-when-cross-origin" 
+                                    allowFullScreen
+                                    style={{ borderRadius: '4px' }}
+                                ></iframe>
+                            );
+                        } else {
+                            // Render regular image
+                            return (
+                                <img 
+                                    src={`/api/weather?source=wxcam&airport=${airport.id}`} 
+                                    alt={`${airport.id} camera`}
+                                    className="camera-image"
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                />
+                            );
+                        }
+                    })()}
                 </div>
             )}
             
@@ -630,7 +678,7 @@ function Map() {
                             const category = getFlightCategory(airport);
                             // Background colors that match circle appearance at 0.2 opacity over white
                             const backgroundColors = {
-                                '#00FF00': '#CCFFCC', // VFR green
+                                '#00A500': '#CCFFCC', // VFR green
                                 '#0000FF': '#CCCCFF', // MVFR blue
                                 '#FF0000': '#FFCCCC', // IFR red
                                 '#800080': '#E6CCE6', // LIFR purple
@@ -682,8 +730,7 @@ function Map() {
                                     transform: translate(-50%, -50%);
                                 ">${pinIcon}${airport.id}</div>`,
                                 iconSize: [0, 0],
-                                iconAnchor: [0, 0],
-                                className: ''
+                                iconAnchor: [0, 0]
                             })}
                             eventHandlers={{
                                 click: (e) => {
