@@ -3,13 +3,13 @@ import * as path from 'path';
 import * as geomagnetism from 'geomagnetism';
 
 export interface ICurrentWeather {
-    metar: string;
-    decodedMetar: any;
+    metar?: string;
+    decodedMetar?: any;
 };
 
 export interface IForecastWeather {
-    taf: string;
-    decodedTafHours: any[];
+    taf?: string;
+    decodedTafHours?: any[];
 };
 
 export interface IWeather {

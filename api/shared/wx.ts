@@ -2,7 +2,7 @@ const https = require('https');
 const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { getCachedData, putCachedData } from './cache';
 import { getAirports } from './airports';
-import { addWeather } from './taf';
+import { addWeather } from './weather';
 
 const noSSLAgent = new https.Agent({ rejectUnauthorized: false });
 

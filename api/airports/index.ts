@@ -1,6 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { getAirports } from '../shared/airports';
-import { addWeather } from '../shared/taf';
+import { addWeather } from '../shared/weather';
 
 const airportsHttpTrigger: AzureFunction = async function (context: Context, _req: HttpRequest): Promise<void> {
     context.log('Airports API endpoint triggered');

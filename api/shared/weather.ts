@@ -60,11 +60,16 @@ export const addWeather = async (airport: IAirport) => {
         return;
     }
 
-    let current: ICurrentWeather | undefined = undefined;
-    if (airport.hasMetar) {
-        const metarCacheKey = `wxmetar-${airport.id}`;
-        current = getCachedData(metarCacheKey);
-        if (!current) {
+    const weatherCacheKey = `wx-${airport.id}`;
+    let weather = getCachedData(weatherCacheKey);
+    if (!weather) {
+        weather = {
+            lastUpdate: Date.now(),
+            current: {},
+            forecast: {}
+        };
+
+        if (airport.hasMetar) {
             try {
                 const response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${airport.icao ?? airport.id}`);
                 const metar = await response.text();
@@ -75,27 +80,16 @@ export const addWeather = async (airport: IAirport) => {
                 } else {
                     metar.replace(/CLR/g, 'SKC'); // Workaround for bug in metar-taf-parser that doesn't recognize CLR
 
-                    current = {
-                        metar,
-                        decodedMetar: metarTafParser.parseMetar(metar)
-                    };
-
-                    putCachedData(metarCacheKey, current);
+                    weather.current.metar = metar;
+                    weather.current.decodedMetar = metarTafParser.parseMetar(metar);
                 }
             } catch (err) {
-                current = {
-                    metar: `NO METAR AVAILABLE (${err})`,
-                    decodedMetar: {}
-                };
+                weather.current.metar = `NO METAR AVAILABLE (${err})`;
+                weather.current.decodedMetar = {};
             }
         }
-    }
 
-    let forecast: IForecastWeather | undefined = undefined;
-    if (airport.hasTaf) {
-        const tafCacheKey = `wxtaf-${airport.id}`;
-        forecast = getCachedData(tafCacheKey);
-        if (!forecast) {
+        if (airport.hasTaf) {
             try {
                 const response = await fetch(`https://aviationweather.gov/api/data/taf?ids=${airport.icao ?? airport.id}`);
                 const taf = await response.text();
@@ -124,25 +118,17 @@ export const addWeather = async (airport: IAirport) => {
                         applyMinimums(hour, airport);
                     }
 
-                    forecast = {
-                        taf,
-                        decodedTafHours
-                    };
-
-                    putCachedData(tafCacheKey, forecast);
+                    weather.forecast.taf = taf;
+                    weather.forecast.decodedTafHours = decodedTafHours;
                 }
             } catch (err) {
-                forecast = {
-                    taf: `NO TAF AVAILABLE (${err})`,
-                    decodedTafHours: []
-                };
+                weather.forecast.taf = `NO TAF AVAILABLE (${err})`;
+                weather.forecast.decodedTafHours = [];
             }
         }
+
+        putCachedData(weatherCacheKey, weather);
     }
 
-    airport.weather = {
-        lastUpdate: Date.now(),
-        current,
-        forecast,
-    };
+    airport.weather = weather;
 };
