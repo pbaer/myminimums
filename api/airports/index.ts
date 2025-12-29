@@ -8,9 +8,7 @@ const airportsHttpTrigger: AzureFunction = async function (context: Context, _re
     try {
         const airports = getAirports();
         
-        // Fetch weather for all airports that have weather capabilities
         const weatherPromises = airports
-            .filter(airport => airport.hasMetar || airport.hasTaf)
             .map(airport => addWeather(airport));
         
         await Promise.all(weatherPromises);

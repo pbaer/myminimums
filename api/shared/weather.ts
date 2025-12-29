@@ -1,9 +1,21 @@
 const loadMetarTafParser = require('../../shared/metar-taf-parser-wrapper');
 const loadNodeFetch = require('../../shared/node-fetch-wrapper');
 import { IAirport, ICurrentWeather, IForecastWeather } from './airports';
+import { IOpenWeatherCurrent, IOpenWeatherHourly, IOpenWeatherDaily, IOpenWeatherAlert } from './openweather-types';
 import { applyMinimums } from './minimums';
 import { oneHourInMs, eachHourOfInterval, oneDayInMs } from './util';
 import { getCachedData, putCachedData } from './cache';
+
+interface IOpenWeatherResponse {
+    lat: number;
+    lon: number;
+    timezone: string;
+    timezone_offset: number;
+    current?: IOpenWeatherCurrent;
+    hourly?: IOpenWeatherHourly[];
+    daily?: IOpenWeatherDaily[];
+    alerts?: IOpenWeatherAlert[];
+}
 
 const processHour = (hour) => {
     hour.wind = hour.prevailing.wind;
@@ -124,6 +136,45 @@ export const addWeather = async (airport: IAirport) => {
             } catch (err) {
                 weather.forecast.taf = `NO TAF AVAILABLE (${err})`;
                 weather.forecast.decodedTafHours = [];
+            }
+        }
+
+        // Fetch OpenWeatherMap One Call API 3.0 data
+        const apiKey = process.env.OPENWEATHERMAP_API_KEY;
+        if (apiKey && airport.lat && airport.lon) {
+            try {
+                // Exclude minutely weather as requested
+                const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${airport.lat}&lon=${airport.lon}&exclude=minutely&units=imperial&appid=${apiKey}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data: IOpenWeatherResponse = await response.json();
+                
+                // Store current weather
+                if (data.current) {
+                    weather.current.openWeather = data.current;
+                }
+                
+                // Store hourly forecast
+                if (data.hourly) {
+                    weather.forecast.openWeatherHourly = data.hourly;
+                }
+                
+                // Store daily forecast
+                if (data.daily) {
+                    weather.forecast.openWeatherDaily = data.daily;
+                }
+                
+                // Store weather alerts
+                if (data.alerts) {
+                    weather.forecast.openWeatherAlerts = data.alerts;
+                }
+            } catch (err) {
+                // Log error but don't fail the entire weather fetch
+                console.error(`Failed to fetch OpenWeather data for ${airport.id}:`, err);
             }
         }
 

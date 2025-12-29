@@ -1,15 +1,25 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as geomagnetism from 'geomagnetism';
+import { 
+    IOpenWeatherCurrent, 
+    IOpenWeatherHourly, 
+    IOpenWeatherDaily, 
+    IOpenWeatherAlert 
+} from './openweather-types';
 
 export interface ICurrentWeather {
     metar?: string;
     decodedMetar?: any;
+    openWeather?: IOpenWeatherCurrent;
 };
 
 export interface IForecastWeather {
     taf?: string;
     decodedTafHours?: any[];
+    openWeatherHourly?: IOpenWeatherHourly[];
+    openWeatherDaily?: IOpenWeatherDaily[];
+    openWeatherAlerts?: IOpenWeatherAlert[];
 };
 
 export interface IWeather {

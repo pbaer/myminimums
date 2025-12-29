@@ -217,94 +217,284 @@ function WeatherInfo({ weather }) {
     return (
         <div className="weather-info">
             {weather.current && (
-                <div className="metar-section">
-                    <h4>Current Weather (METAR)</h4>
-                    <div className="metar-raw">{weather.current.metar}</div>
-                    {weather.current.decodedMetar && (
-                        <div className="metar-decoded">
-                            <div className="weather-item">
-                                <strong>Time:</strong> {weather.current.decodedMetar.day && weather.current.decodedMetar.hour !== undefined ? 
-                                    `${String(weather.current.decodedMetar.day).padStart(2, '0')}${String(weather.current.decodedMetar.hour).padStart(2, '0')}${String(weather.current.decodedMetar.minute || 0).padStart(2, '0')}Z` : 'N/A'}
-                            </div>
-                            {weather.current.decodedMetar.flight_category && (
-                                <div className="weather-item">
-                                    <strong>Flight Category:</strong> {weather.current.decodedMetar.flight_category}
-                                </div>
-                            )}
-                            {weather.current.decodedMetar.wind && (
-                                <div className="weather-item">
-                                    <strong>Wind:</strong> {weather.current.decodedMetar.wind.degrees || weather.current.decodedMetar.wind.direction || 'VRB'}° 
-                                    @ {weather.current.decodedMetar.wind.speed || weather.current.decodedMetar.wind.speed_kts || 0}kt
-                                    {(weather.current.decodedMetar.wind.gust || weather.current.decodedMetar.wind.gust_kts) && ` G${weather.current.decodedMetar.wind.gust || weather.current.decodedMetar.wind.gust_kts}kt`}
-                                </div>
-                            )}
-                            {weather.current.decodedMetar.visibility && (
-                                <div className="weather-item">
-                                    <strong>Visibility:</strong> {weather.current.decodedMetar.visibility.value}{weather.current.decodedMetar.visibility.unit || 'SM'}
-                                </div>
-                            )}
-                            {weather.current.decodedMetar.clouds && weather.current.decodedMetar.clouds.length > 0 && (() => {
-                                // Find ceiling (lowest BKN or OVC layer)
-                                const ceilingLayer = weather.current.decodedMetar.clouds.find(
-                                    cloud => cloud.quantity === 'BKN' || cloud.quantity === 'OVC'
-                                );
-                                const ceilingAlt = ceilingLayer ? ceilingLayer.height : null;
-                                
-                                // Sort clouds highest to lowest
-                                const sortedClouds = [...weather.current.decodedMetar.clouds].sort((a, b) => b.height - a.height);
-                                
-                                return (
+                <div className="current-weather-section">
+                    <h4>Current Weather</h4>
+                    
+                    {weather.current.metar && (
+                        <div className="metar-subsection">
+                            <h5>METAR</h5>
+                            <div className="metar-raw">{weather.current.metar}</div>
+                            {weather.current.decodedMetar && (
+                                <div className="metar-decoded">
                                     <div className="weather-item">
-                                        <strong>Clouds:</strong>
-                                        <ul>
-                                            {sortedClouds.map((cloud, idx) => {
-                                                const isCeilingOrHigher = ceilingAlt !== null && cloud.height >= ceilingAlt;
-                                                const isCeiling = cloud === ceilingLayer;
-                                                
-                                                return (
-                                                    <li key={idx} style={{ fontWeight: isCeilingOrHigher ? 'bold' : 'normal' }}>
-                                                        {cloud.quantity} @ {cloud.height}ft
-                                                        {isCeiling && ' (ceiling)'}
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
+                                        <strong>Time:</strong> {weather.current.decodedMetar.day && weather.current.decodedMetar.hour !== undefined ? 
+                                            `${String(weather.current.decodedMetar.day).padStart(2, '0')}${String(weather.current.decodedMetar.hour).padStart(2, '0')}${String(weather.current.decodedMetar.minute || 0).padStart(2, '0')}Z` : 'N/A'}
                                     </div>
-                                );
-                            })()}
-                            {weather.current.decodedMetar.weatherConditions && weather.current.decodedMetar.weatherConditions.length > 0 && (
-                                <div className="weather-item">
-                                    <strong>Weather:</strong> {weather.current.decodedMetar.weatherConditions.map(wc => 
-                                        `${wc.intensity || ''}${wc.phenomenons.join(' ')}`
-                                    ).join(', ')}
+                                    {weather.current.decodedMetar.flight_category && (
+                                        <div className="weather-item">
+                                            <strong>Flight Category:</strong> {weather.current.decodedMetar.flight_category}
+                                        </div>
+                                    )}
+                                    {weather.current.decodedMetar.wind && (
+                                        <div className="weather-item">
+                                            <strong>Wind:</strong> {weather.current.decodedMetar.wind.degrees || weather.current.decodedMetar.wind.direction || 'VRB'}° 
+                                            @ {weather.current.decodedMetar.wind.speed || weather.current.decodedMetar.wind.speed_kts || 0}kt
+                                            {(weather.current.decodedMetar.wind.gust || weather.current.decodedMetar.wind.gust_kts) && ` G${weather.current.decodedMetar.wind.gust || weather.current.decodedMetar.wind.gust_kts}kt`}
+                                        </div>
+                                    )}
+                                    {weather.current.decodedMetar.visibility && (
+                                        <div className="weather-item">
+                                            <strong>Visibility:</strong> {weather.current.decodedMetar.visibility.value}{weather.current.decodedMetar.visibility.unit || 'SM'}
+                                        </div>
+                                    )}
+                                    {weather.current.decodedMetar.clouds && weather.current.decodedMetar.clouds.length > 0 && (() => {
+                                        // Find ceiling (lowest BKN or OVC layer)
+                                        const ceilingLayer = weather.current.decodedMetar.clouds.find(
+                                            cloud => cloud.quantity === 'BKN' || cloud.quantity === 'OVC'
+                                        );
+                                        const ceilingAlt = ceilingLayer ? ceilingLayer.height : null;
+                                        
+                                        // Sort clouds highest to lowest
+                                        const sortedClouds = [...weather.current.decodedMetar.clouds].sort((a, b) => b.height - a.height);
+                                        
+                                        return (
+                                            <div className="weather-item">
+                                                <strong>Clouds:</strong>
+                                                <ul>
+                                                    {sortedClouds.map((cloud, idx) => {
+                                                        const isCeilingOrHigher = ceilingAlt !== null && cloud.height >= ceilingAlt;
+                                                        const isCeiling = cloud === ceilingLayer;
+                                                        
+                                                        return (
+                                                            <li key={idx} style={{ fontWeight: isCeilingOrHigher ? 'bold' : 'normal' }}>
+                                                                {cloud.quantity} @ {cloud.height}ft
+                                                                {isCeiling && ' (ceiling)'}
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </div>
+                                        );
+                                    })()}
+                                    {weather.current.decodedMetar.weatherConditions && weather.current.decodedMetar.weatherConditions.length > 0 && (
+                                        <div className="weather-item">
+                                            <strong>Weather:</strong> {weather.current.decodedMetar.weatherConditions.map(wc => 
+                                                `${wc.intensity || ''}${wc.phenomenons.join(' ')}`
+                                            ).join(', ')}
+                                        </div>
+                                    )}
+                                    {weather.current.decodedMetar.temperature !== undefined && (
+                                        <div className="weather-item">
+                                            <strong>Temperature:</strong> {weather.current.decodedMetar.temperature}°C 
+                                            ({(weather.current.decodedMetar.temperature * 9/5 + 32).toFixed(1)}°F)
+                                        </div>
+                                    )}
+                                    {weather.current.decodedMetar.dewPoint !== undefined && (
+                                        <div className="weather-item">
+                                            <strong>Dewpoint:</strong> {weather.current.decodedMetar.dewPoint}°C 
+                                            ({(weather.current.decodedMetar.dewPoint * 9/5 + 32).toFixed(1)}°F)
+                                        </div>
+                                    )}
+                                    {weather.current.decodedMetar.altimeter && (
+                                        <div className="weather-item">
+                                            <strong>Altimeter:</strong> {weather.current.decodedMetar.altimeter.value}"
+                                        </div>
+                                    )}
                                 </div>
                             )}
-                            {weather.current.decodedMetar.temperature !== undefined && (
+                        </div>
+                    )}
+                    
+                    {weather.current.openWeather && (
+                        <div className="openweather-current-subsection">
+                            <h5>OpenWeather Current</h5>
+                            <div className="openweather-decoded">
                                 <div className="weather-item">
-                                    <strong>Temperature:</strong> {weather.current.decodedMetar.temperature}°C 
-                                    ({(weather.current.decodedMetar.temperature * 9/5 + 32).toFixed(1)}°F)
+                                    <strong>Time:</strong> {new Date(weather.current.openWeather.dt * 1000).toLocaleString()}
                                 </div>
-                            )}
-                            {weather.current.decodedMetar.dewPoint !== undefined && (
+                                {weather.current.openWeather.weather && weather.current.openWeather.weather.length > 0 && (
+                                    <div className="weather-item">
+                                        <strong>Conditions:</strong> {weather.current.openWeather.weather[0].description}
+                                        <img 
+                                            src={`https://openweathermap.org/img/wn/${weather.current.openWeather.weather[0].icon}@2x.png`}
+                                            alt={weather.current.openWeather.weather[0].description}
+                                            style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginLeft: '10px' }}
+                                        />
+                                    </div>
+                                )}
                                 <div className="weather-item">
-                                    <strong>Dewpoint:</strong> {weather.current.decodedMetar.dewPoint}°C 
-                                    ({(weather.current.decodedMetar.dewPoint * 9/5 + 32).toFixed(1)}°F)
+                                    <strong>Temperature:</strong> {weather.current.openWeather.temp.toFixed(1)}°F
+                                    (feels like {weather.current.openWeather.feels_like.toFixed(1)}°F)
                                 </div>
-                            )}
-                            {weather.current.decodedMetar.altimeter && (
                                 <div className="weather-item">
-                                    <strong>Altimeter:</strong> {weather.current.decodedMetar.altimeter.value}"
+                                    <strong>Wind:</strong> {weather.current.openWeather.wind_deg}° @ {weather.current.openWeather.wind_speed.toFixed(1)} mph
+                                    {weather.current.openWeather.wind_gust && ` G${weather.current.openWeather.wind_gust.toFixed(1)} mph`}
                                 </div>
-                            )}
+                                <div className="weather-item">
+                                    <strong>Visibility:</strong> {(weather.current.openWeather.visibility / 1609.34).toFixed(1)} mi
+                                </div>
+                                <div className="weather-item">
+                                    <strong>Clouds:</strong> {weather.current.openWeather.clouds}%
+                                </div>
+                                <div className="weather-item">
+                                    <strong>Humidity:</strong> {weather.current.openWeather.humidity}%
+                                </div>
+                                <div className="weather-item">
+                                    <strong>Pressure:</strong> {weather.current.openWeather.pressure} hPa
+                                </div>
+                                <div className="weather-item">
+                                    <strong>Dewpoint:</strong> {weather.current.openWeather.dew_point.toFixed(1)}°F
+                                </div>
+                                <div className="weather-item">
+                                    <strong>UV Index:</strong> {weather.current.openWeather.uvi}
+                                </div>
+                                {weather.current.openWeather.rain && weather.current.openWeather.rain['1h'] && (
+                                    <div className="weather-item">
+                                        <strong>Rain (1h):</strong> {weather.current.openWeather.rain['1h']} mm
+                                    </div>
+                                )}
+                                {weather.current.openWeather.snow && weather.current.openWeather.snow['1h'] && (
+                                    <div className="weather-item">
+                                        <strong>Snow (1h):</strong> {weather.current.openWeather.snow['1h']} mm
+                                    </div>
+                                )}
+                                {weather.current.openWeather.sunrise && (
+                                    <div className="weather-item">
+                                        <strong>Sunrise:</strong> {new Date(weather.current.openWeather.sunrise * 1000).toLocaleTimeString()}
+                                    </div>
+                                )}
+                                {weather.current.openWeather.sunset && (
+                                    <div className="weather-item">
+                                        <strong>Sunset:</strong> {new Date(weather.current.openWeather.sunset * 1000).toLocaleTimeString()}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
             )}
             
             {weather.forecast && (
-                <div className="taf-section">
-                    <h4>Forecast (TAF)</h4>
-                    <div className="taf-raw">{weather.forecast.taf}</div>
+                <div className="forecast-section">
+                    <h4>Forecast</h4>
+                    
+                    {weather.forecast.taf && (
+                        <div className="taf-subsection">
+                            <h5>TAF</h5>
+                            <div className="taf-raw">{weather.forecast.taf}</div>
+                        </div>
+                    )}
+                    
+                    {weather.forecast.openWeatherHourly && weather.forecast.openWeatherHourly.length > 0 && (
+                        <div className="openweather-hourly-subsection">
+                            <h5>OpenWeather Hourly Forecast (Next 48 Hours)</h5>
+                            <div className="hourly-forecast-grid">
+                                {weather.forecast.openWeatherHourly.slice(0, 12).map((hour, idx) => (
+                                    <div key={idx} className="hourly-item">
+                                        <div className="hourly-time">
+                                            {new Date(hour.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
+                                        {hour.weather && hour.weather.length > 0 && (
+                                            <img 
+                                                src={`https://openweathermap.org/img/wn/${hour.weather[0].icon}.png`}
+                                                alt={hour.weather[0].description}
+                                                title={hour.weather[0].description}
+                                                style={{ width: '40px', height: '40px' }}
+                                            />
+                                        )}
+                                        <div className="hourly-temp">{hour.temp.toFixed(0)}°F</div>
+                                        <div className="hourly-wind">{hour.wind_deg}° {hour.wind_speed.toFixed(0)}mph</div>
+                                        <div className="hourly-pop">PoP: {(hour.pop * 100).toFixed(0)}%</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {weather.forecast.openWeatherDaily && weather.forecast.openWeatherDaily.length > 0 && (
+                        <div className="openweather-daily-subsection">
+                            <h5>OpenWeather Daily Forecast (Next 8 Days)</h5>
+                            <div className="daily-forecast-list">
+                                {weather.forecast.openWeatherDaily.map((day, idx) => (
+                                    <div key={idx} className="daily-item">
+                                        <div className="daily-date">
+                                            <strong>{new Date(day.dt * 1000).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</strong>
+                                        </div>
+                                        {day.weather && day.weather.length > 0 && (
+                                            <div className="daily-conditions">
+                                                <img 
+                                                    src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
+                                                    alt={day.weather[0].description}
+                                                    style={{ width: '50px', height: '50px', verticalAlign: 'middle' }}
+                                                />
+                                                <span>{day.weather[0].description}</span>
+                                            </div>
+                                        )}
+                                        {day.summary && (
+                                            <div className="daily-summary">{day.summary}</div>
+                                        )}
+                                        <div className="daily-temps">
+                                            <strong>High:</strong> {day.temp.max.toFixed(0)}°F | 
+                                            <strong> Low:</strong> {day.temp.min.toFixed(0)}°F
+                                        </div>
+                                        <div className="daily-details">
+                                            Wind: {day.wind_deg}° @ {day.wind_speed.toFixed(1)} mph
+                                            {day.wind_gust && ` G${day.wind_gust.toFixed(1)}`}
+                                        </div>
+                                        <div className="daily-details">
+                                            Humidity: {day.humidity}% | Clouds: {day.clouds}%
+                                        </div>
+                                        <div className="daily-details">
+                                            PoP: {(day.pop * 100).toFixed(0)}% | UV Index: {day.uvi}
+                                        </div>
+                                        {day.rain && (
+                                            <div className="daily-details">
+                                                Rain: {day.rain} mm
+                                            </div>
+                                        )}
+                                        {day.snow && (
+                                            <div className="daily-details">
+                                                Snow: {day.snow} mm
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {weather.forecast.openWeatherAlerts && weather.forecast.openWeatherAlerts.length > 0 && (
+                        <div className="openweather-alerts-subsection">
+                            <h5>Weather Alerts</h5>
+                            {weather.forecast.openWeatherAlerts.map((alert, idx) => (
+                                <div key={idx} className="alert-item" style={{ 
+                                    backgroundColor: '#fff3cd', 
+                                    border: '1px solid #ffc107',
+                                    borderRadius: '4px',
+                                    padding: '10px',
+                                    marginBottom: '10px'
+                                }}>
+                                    <div className="alert-header">
+                                        <strong>{alert.event}</strong>
+                                    </div>
+                                    <div className="alert-sender">
+                                        Source: {alert.sender_name}
+                                    </div>
+                                    <div className="alert-time">
+                                        {new Date(alert.start * 1000).toLocaleString()} - {new Date(alert.end * 1000).toLocaleString()}
+                                    </div>
+                                    <div className="alert-description">
+                                        {alert.description}
+                                    </div>
+                                    {alert.tags && alert.tags.length > 0 && (
+                                        <div className="alert-tags">
+                                            Tags: {alert.tags.join(', ')}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
             
